@@ -484,7 +484,7 @@ function validateQ4() {
     }
   });
   if (!valid) {
-    errEl.textContent = hasSelected && !valid ? '選択したブースの星評価と、低評価の場合は理由を入力してください' : '低評価の理由を入力してください';
+    errEl.textContent = hasSelected && !valid ? '満足度を選択してください' : '低評価の理由を入力してください';
     errEl.classList.add('show'); return;
   }
   errEl.classList.remove('show');
