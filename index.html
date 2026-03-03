@@ -18,73 +18,92 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .progress-fill{height:100%;background:var(--brand);border-radius:3px;transition:width .4s ease}
 .progress-text{font-size:.75rem;color:var(--text-sub);margin-top:6px;text-align:right}
 
-/* Slide container */
+/* Slide */
 .survey-container{flex:1;display:flex;align-items:center;justify-content:center;padding:80px 20px 40px}
-.slide{display:none;width:100%;max-width:480px;animation:fadeIn .35s ease}
+.slide{display:none;width:100%;max-width:480px;animation:slideIn .35s ease}
 .slide.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 
-/* Question label */
+/* Intro */
+.intro-icon{font-size:3rem;text-align:center;margin-bottom:12px;animation:bounce 2s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.intro-title{font-size:1.3rem;font-weight:700;text-align:center;line-height:1.7;margin-bottom:8px}
+.intro-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;color:#92400e;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:20px;margin:0 auto 16px;text-align:center}
+.intro-badge-wrap{text-align:center}
+.intro-thanks{font-size:.9rem;color:var(--text-sub);text-align:center;line-height:1.8;margin-bottom:24px}
+.intro-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.intro-feat{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);font-size:.9rem}
+.intro-feat-icon{font-size:1.3rem;flex-shrink:0}
+
+/* Question */
 .q-number{font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:6px}
-.q-title{font-size:1.2rem;font-weight:700;line-height:1.6;margin-bottom:24px}
-.q-note{font-size:.8rem;color:var(--text-sub);margin-top:-16px;margin-bottom:24px}
+.q-title{font-size:1.15rem;font-weight:700;line-height:1.6;margin-bottom:6px}
+.q-required{display:inline-block;font-size:.7rem;font-weight:700;color:#fff;background:#e74c3c;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.q-optional{display:inline-block;font-size:.7rem;font-weight:700;color:var(--text-sub);background:#e0e0e0;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.q-subtitle{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
+.q-note{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
 
-/* Radio options */
+/* Options */
 .options{display:flex;flex-direction:column;gap:10px}
-.opt-btn{display:block;width:100%;text-align:left;padding:14px 18px;border:2px solid #e0e0e0;border-radius:var(--radius);background:#fff;font-size:.95rem;font-family:inherit;color:var(--text);cursor:pointer;transition:all .2s}
-.opt-btn:active,.opt-btn.selected{border-color:var(--brand);background:var(--brand-light);color:var(--brand-dark);font-weight:500}
+.opt-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 18px;border:2px solid #e5e7eb;border-radius:var(--radius);background:#fff;font-size:.95rem;font-family:inherit;color:var(--text);cursor:pointer;transition:all .15s}
+.opt-btn:active{transform:scale(.98)}
+.opt-btn.selected{border-color:var(--brand);background:var(--brand-light);color:var(--brand-dark);font-weight:500}
+.opt-btn .opt-emoji{font-size:1.2rem;flex-shrink:0}
+.opt-btn .opt-check{width:20px;height:20px;border:2px solid #d0d0d0;border-radius:50%;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt-btn.selected .opt-check{border-color:var(--brand);background:var(--brand)}
+.opt-btn.selected .opt-check::after{content:'✓';color:#fff;font-size:.7rem;font-weight:700}
 
 /* Star rating */
-.stars-wrap{display:flex;flex-direction:column;gap:16px}
-.star-row{display:flex;align-items:center;gap:12px}
-.star-row-label{font-size:.9rem;font-weight:500;min-width:0;flex-shrink:0}
 .stars{display:flex;gap:6px;direction:rtl;justify-content:flex-end}
 .stars input{display:none}
-.stars label{font-size:2rem;color:#d0d0d0;cursor:pointer;transition:color .15s;line-height:1}
+.stars label{font-size:2.2rem;color:#d0d0d0;cursor:pointer;transition:color .15s;line-height:1}
 .stars label:hover,.stars label:hover~label,.stars input:checked~label{color:#f5b731}
-.star-reason{margin-top:8px;display:none}
+.star-reason{margin-top:10px;display:none}
 .star-reason.show{display:block}
-.star-reason textarea{width:100%;padding:10px 14px;border:2px solid #e0e0e0;border-radius:var(--radius);font-family:inherit;font-size:.9rem;resize:vertical;min-height:60px}
-.star-reason textarea:focus{outline:none;border-color:var(--brand)}
 
 /* Text input */
-.text-input,.email-input{width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:var(--radius);font-size:1rem;font-family:inherit;background:#fff;transition:border-color .2s}
+.text-input,.email-input{width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:var(--radius);font-size:1rem;font-family:inherit;background:#fff;transition:border-color .2s}
 .text-input:focus,.email-input:focus{outline:none;border-color:var(--brand)}
 textarea.text-input{resize:vertical;min-height:100px}
+.input-error{border-color:#e74c3c !important}
+.error-msg{font-size:.8rem;color:#e74c3c;margin-top:6px;display:none}
+.error-msg.show{display:block}
 
 /* Booth checkboxes */
-.booth-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.booth-check{display:flex;align-items:center;gap:10px;padding:12px 16px;border:2px solid #e0e0e0;border-radius:var(--radius);background:#fff;cursor:pointer;transition:all .2s}
+.booth-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.booth-check{display:flex;align-items:center;gap:10px;padding:12px 16px;border:2px solid #e5e7eb;border-radius:var(--radius);background:#fff;cursor:pointer;transition:all .15s}
 .booth-check.checked{border-color:var(--brand);background:var(--brand-light)}
 .booth-check input{display:none}
-.booth-check .checkmark{width:22px;height:22px;border:2px solid #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.booth-check .checkmark{width:22px;height:22px;border:2px solid #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
 .booth-check.checked .checkmark{background:var(--brand);border-color:var(--brand)}
 .booth-check.checked .checkmark::after{content:'✓';color:#fff;font-size:.85rem;font-weight:700}
-.booth-check span:last-child{font-size:.95rem}
+.booth-check .booth-emoji{font-size:1.2rem;flex-shrink:0}
+.booth-check span:last-child{font-size:.9rem}
 
-/* Booth rating section */
-.booth-ratings{display:flex;flex-direction:column;gap:20px;margin-top:16px}
+/* Booth ratings */
+.booth-ratings{display:flex;flex-direction:column;gap:16px;margin-top:8px}
 .booth-rating-item{display:none;padding:14px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
 .booth-rating-item.show{display:block}
+.booth-rating-label{font-size:.85rem;font-weight:500;margin-bottom:8px}
 
 /* Buttons */
-.btn-next{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-top:24px;padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:background .2s;width:100%}
-.btn-next:active{background:var(--brand-dark)}
-.btn-next:disabled{background:#ccc;cursor:not-allowed}
-.btn-back{display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:10px;background:none;border:none;color:var(--text-sub);font-size:.85rem;font-family:inherit;cursor:pointer;width:100%}
+.btn-next{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:24px;padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;width:100%}
+.btn-next:active{background:var(--brand-dark);transform:scale(.98)}
+.btn-next:disabled{background:#ccc;cursor:not-allowed;transform:none}
+.btn-back{display:flex;align-items:center;justify-content:center;margin-top:10px;padding:10px;background:none;border:none;color:var(--text-sub);font-size:.85rem;font-family:inherit;cursor:pointer;width:100%}
 .btn-back:hover{color:var(--text)}
 
-/* Follow-up text */
+/* Follow-up */
 .followup{margin-top:12px;display:none}
 .followup.show{display:block}
 
-/* Completion */
+/* Complete */
 .complete-slide{text-align:center}
 .complete-icon{font-size:3.5rem;margin-bottom:16px}
-.complete-title{font-size:1.4rem;font-weight:700;margin-bottom:8px}
+.complete-title{font-size:1.4rem;font-weight:700;margin-bottom:8px;color:var(--brand)}
 .complete-msg{color:var(--text-sub);line-height:1.8}
 
-/* Loading overlay */
+/* Loading */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 .loading.show{display:flex}
 .spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
@@ -93,84 +112,102 @@ textarea.text-input{resize:vertical;min-height:100px}
 </head>
 <body>
 
-<!-- Progress Bar -->
+<!-- Progress -->
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   <div class="progress-text" id="progressText"></div>
 </div>
 
-<!-- Survey -->
 <div class="survey-container">
 
-  <!-- Slide 0: Email -->
+  <!-- Slide 0: Intro + Email -->
   <div class="slide" id="s0">
-    <div class="q-number">はじめに</div>
-    <div class="q-title">メールアドレスを教えてください</div>
+    <div class="intro-icon">📋✨</div>
+    <div class="intro-title">あなたの声を聞かせてください！</div>
+    <div class="intro-badge-wrap"><span class="intro-badge">⏱ かんたん2分</span></div>
+    <p class="intro-thanks">本日は「駆け込み確定申告ナイト」に<br>ご参加いただき、誠にありがとうございました！</p>
+    <div class="intro-features">
+      <div class="intro-feat"><span class="intro-feat-icon">📝</span><span>全8問のかんたんアンケート</span></div>
+      <div class="intro-feat"><span class="intro-feat-icon">📱</span><span>タップで回答、すぐ終わります</span></div>
+      <div class="intro-feat"><span class="intro-feat-icon">💡</span><span>あなたの声がサービス改善に繋がります</span></div>
+    </div>
+    <div class="q-subtitle" style="margin-bottom:8px">メールアドレス <span class="q-required">必須</span></div>
     <input type="email" class="email-input" id="email" placeholder="example@email.com" inputmode="email" autocomplete="email">
-    <button class="btn-next" onclick="validateEmail()">次へ →</button>
+    <div class="error-msg" id="emailError">有効なメールアドレスを入力してください</div>
+    <button class="btn-next" onclick="validateEmail()">アンケートを始める 🚀</button>
   </div>
 
-  <!-- Slide 1: Q1 星5段階 -->
+  <!-- Slide 1: Q1 -->
   <div class="slide" id="s1">
     <div class="q-number">Q1</div>
-    <div class="q-title">今日のイベントの満足度を教えてください</div>
+    <div class="q-title">イベント全体の満足度を教えてください <span class="q-required">必須</span></div>
+    <div class="q-subtitle">一つ選んでください</div>
     <div class="stars" id="stars1"></div>
-    <button class="btn-next" id="btn1" disabled onclick="goNext()">次へ →</button>
+    <button class="btn-next" id="nextBtn1" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 2: Q2 -->
   <div class="slide" id="s2">
     <div class="q-number">Q2</div>
-    <div class="q-title">確定申告への疑問は解消されましたか？</div>
+    <div class="q-title">確定申告への疑問は解消されましたか？ <span class="q-required">必須</span></div>
+    <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts2"></div>
+    <button class="btn-next" id="nextBtn2" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 3: Q3 -->
   <div class="slide" id="s3">
     <div class="q-number">Q3</div>
-    <div class="q-title">タックスナップに対する疑問は解消されましたか？</div>
+    <div class="q-title">タックスナップに対する疑問は解消されましたか？ <span class="q-required">必須</span></div>
+    <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts3"></div>
+    <button class="btn-next" id="nextBtn3" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
-  <!-- Slide 4: Q4 ブース選択 + 星 -->
+  <!-- Slide 4: Q4 -->
   <div class="slide" id="s4">
     <div class="q-number">Q4</div>
-    <div class="q-title">参加したブースの満足度を教えてください</div>
-    <div class="q-note">参加したブースを選択してください</div>
+    <div class="q-title">参加したブースの満足度を教えてください <span class="q-required">必須</span></div>
+    <div class="q-subtitle">参加したブースを選んで、それぞれ評価してください</div>
     <div class="booth-checks" id="boothChecks"></div>
     <div class="booth-ratings" id="boothRatings"></div>
-    <button class="btn-next" id="btn4" onclick="goNext()">次へ →</button>
+    <div class="error-msg" id="boothError">低評価の理由を入力してください</div>
+    <button class="btn-next" id="nextBtn4" onclick="validateQ4()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 5: Q5 -->
   <div class="slide" id="s5">
     <div class="q-number">Q5</div>
-    <div class="q-title">来年同じようなイベントがあった場合、参加したいと思いますか？</div>
+    <div class="q-title">来年同じようなイベントがあった場合、参加したいと思いますか？ <span class="q-required">必須</span></div>
+    <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts5"></div>
     <div class="followup" id="followup5">
       <textarea class="text-input" id="reason5" placeholder="理由を教えてください"></textarea>
-      <button class="btn-next" onclick="goNext()">次へ →</button>
+      <div class="error-msg" id="reason5Error">理由を入力してください</div>
     </div>
+    <button class="btn-next" id="nextBtn5" disabled onclick="validateQ5()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 6: Q6 -->
   <div class="slide" id="s6">
     <div class="q-number">Q6</div>
-    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？</div>
+    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？ <span class="q-required">必須</span></div>
+    <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts6"></div>
+    <button class="btn-next" id="nextBtn6" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 7: Q7 -->
   <div class="slide" id="s7">
     <div class="q-number">Q7</div>
-    <div class="q-title">今日一番よかったことは？</div>
-    <div class="q-note">一言でOKです</div>
+    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
+    <div class="q-note">一言でOKです 💬</div>
     <textarea class="text-input" id="q7text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
@@ -179,9 +216,10 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 8: Q8 -->
   <div class="slide" id="s8">
     <div class="q-number">Q8</div>
-    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください</div>
+    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください <span class="q-optional">任意</span></div>
+    <div class="q-note">些細なことでもOKです 🙏</div>
     <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
-    <button class="btn-next" onclick="submitSurvey()">送信する ✉</button>
+    <button class="btn-next" onclick="submitSurvey()">送信する ✉️</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
@@ -205,29 +243,50 @@ textarea.text-input{resize:vertical;min-height:100px}
 <script>
 // === Config ===
 const GAS_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'; // ← GAS URLをここに入れる
-const TOTAL_SLIDES = 9; // 0..8 = questions, 9 = complete
+const TOTAL_SLIDES = 9;
 let current = 0;
 const answers = {};
 
-// === Data ===
-const q2opts = ['かなり解消された','少し解消された','あまり変わらない','むしろ疑問が増えた','もともと疑問はなかった'];
-const q3opts = ['かなり解消された','少し解消された','あまり変わらない','むしろ疑問が増えた','もともと疑問はなかった'];
-const q5opts = ['参加する','参加しない','分からない'];
-const q6opts = ['ぜひ紹介したい','機会があれば紹介する','あまり紹介しない','紹介しない'];
+// === Option data with emojis ===
+const q2opts = [
+  {emoji:'😊', text:'かなり解消された'},
+  {emoji:'🙂', text:'少し解消された'},
+  {emoji:'😐', text:'あまり変わらない'},
+  {emoji:'😟', text:'むしろ疑問が増えた'},
+  {emoji:'💡', text:'もともと疑問はなかった'}
+];
+const q3opts = [
+  {emoji:'😊', text:'かなり解消された'},
+  {emoji:'🙂', text:'少し解消された'},
+  {emoji:'😐', text:'あまり変わらない'},
+  {emoji:'😟', text:'むしろ疑問が増えた'},
+  {emoji:'💡', text:'もともと疑問はなかった'}
+];
+const q5opts = [
+  {emoji:'🙋', text:'参加する'},
+  {emoji:'🙅', text:'参加しない'},
+  {emoji:'🤔', text:'分からない'}
+];
+const q6opts = [
+  {emoji:'🤩', text:'ぜひ紹介したい'},
+  {emoji:'😊', text:'機会があれば紹介する'},
+  {emoji:'😐', text:'あまり紹介しない'},
+  {emoji:'🙅', text:'紹介しない'}
+];
 const booths = [
-  {id:'A', label:'A：税理士 よくある質問コーナー'},
-  {id:'B', label:'B：個別相談'},
-  {id:'C', label:'C：ユーザー交流会'}
+  {id:'A', emoji:'👨‍⚖️', label:'A：税理士 よくある質問コーナー'},
+  {id:'B', emoji:'💬', label:'B：個別相談'},
+  {id:'C', emoji:'🤝', label:'C：ユーザー交流会'}
 ];
 
 // === Init ===
 function init() {
   buildStars('stars1', 'q1');
-  buildRadio('opts2', q2opts, 'q2');
-  buildRadio('opts3', q3opts, 'q3');
+  buildRadio('opts2', q2opts, 'q2', 'nextBtn2');
+  buildRadio('opts3', q3opts, 'q3', 'nextBtn3');
   buildBooths();
-  buildRadio('opts5', q5opts, 'q5', true);
-  buildRadio('opts6', q6opts, 'q6');
+  buildRadio('opts5', q5opts, 'q5', 'nextBtn5', handleQ5Select);
+  buildRadio('opts6', q6opts, 'q6', 'nextBtn6');
   showSlide(0);
   document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') validateEmail(); });
 }
@@ -245,7 +304,7 @@ function buildStars(containerId, key, onRate) {
       answers[key] = i;
       if (onRate) onRate(i);
       else {
-        const btn = document.getElementById('btn1');
+        const btn = document.getElementById('nextBtn1');
         if (btn) btn.disabled = false;
       }
     });
@@ -255,26 +314,33 @@ function buildStars(containerId, key, onRate) {
 }
 
 // === Radio builder ===
-function buildRadio(containerId, opts, key, hasFollowup) {
+function buildRadio(containerId, opts, key, nextBtnId, onSelect) {
   const wrap = document.getElementById(containerId);
-  opts.forEach(text => {
+  opts.forEach(opt => {
     const btn = document.createElement('button');
-    btn.className = 'opt-btn'; btn.textContent = text; btn.type = 'button';
+    btn.className = 'opt-btn'; btn.type = 'button';
+    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span><span>${opt.text}</span><span class="opt-check"></span>`;
     btn.addEventListener('click', () => {
-      answers[key] = text;
+      answers[key] = opt.text;
       wrap.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      if (hasFollowup) {
-        if (text === '参加する' || text === '参加しない') {
-          document.getElementById('followup5').classList.add('show');
-          return;
-        }
-        document.getElementById('followup5').classList.remove('show');
-      }
-      setTimeout(goNext, 350);
+      document.getElementById(nextBtnId).disabled = false;
+      if (onSelect) onSelect(opt.text);
     });
     wrap.appendChild(btn);
   });
+}
+
+// === Q5 handler ===
+function handleQ5Select(text) {
+  const followup = document.getElementById('followup5');
+  if (text === '参加する' || text === '参加しない') {
+    followup.classList.add('show');
+  } else {
+    followup.classList.remove('show');
+    document.getElementById('reason5').value = '';
+    document.getElementById('reason5Error').classList.remove('show');
+  }
 }
 
 // === Booth builder ===
@@ -283,10 +349,9 @@ function buildBooths() {
   const rateWrap = document.getElementById('boothRatings');
 
   booths.forEach(b => {
-    // Checkbox
     const lbl = document.createElement('label');
     lbl.className = 'booth-check';
-    lbl.innerHTML = `<input type="checkbox" value="${b.id}"><div class="checkmark"></div><span>${b.label}</span>`;
+    lbl.innerHTML = `<input type="checkbox" value="${b.id}"><div class="checkmark"></div><span class="booth-emoji">${b.emoji}</span><span>${b.label}</span>`;
     lbl.addEventListener('click', e => {
       e.preventDefault();
       const cb = lbl.querySelector('input');
@@ -298,24 +363,23 @@ function buildBooths() {
         delete answers['q4_' + b.id + '_reason'];
         const stars = document.getElementById('booth_rate_' + b.id).querySelectorAll('input');
         stars.forEach(s => s.checked = false);
-        document.getElementById('reason_' + b.id).closest('.star-reason').classList.remove('show');
+        const rw = document.getElementById('reason_wrap_' + b.id);
+        if (rw) rw.classList.remove('show');
       }
     });
     checkWrap.appendChild(lbl);
 
-    // Rating
     const item = document.createElement('div');
     item.className = 'booth-rating-item';
     item.id = 'booth_rate_' + b.id;
     item.innerHTML = `
-      <div class="star-row"><span class="star-row-label">${b.label}</span></div>
+      <div class="booth-rating-label">${b.emoji} ${b.label}</div>
       <div class="stars" id="stars_${b.id}"></div>
       <div class="star-reason" id="reason_wrap_${b.id}">
         <textarea class="text-input" id="reason_${b.id}" placeholder="低評価の理由を教えてください" style="min-height:60px;margin-top:8px"></textarea>
       </div>`;
     rateWrap.appendChild(item);
 
-    // Build stars for booth
     setTimeout(() => {
       buildStars('stars_' + b.id, 'q4_' + b.id, rating => {
         answers['q4_' + b.id] = rating;
@@ -336,7 +400,6 @@ function showSlide(n) {
   updateProgress();
   window.scrollTo(0, 0);
 }
-
 function goNext() { showSlide(current + 1); }
 function goBack() { showSlide(current - 1); }
 
@@ -347,28 +410,64 @@ function updateProgress() {
     ? `${current} / ${TOTAL_SLIDES}` : '';
 }
 
-// === Validation ===
+// === Validations ===
 function validateEmail() {
   const input = document.getElementById('email');
   const val = input.value.trim();
   if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-    input.style.borderColor = '#e74c3c';
+    input.classList.add('input-error');
+    document.getElementById('emailError').classList.add('show');
     input.focus();
     return;
   }
   answers.email = val;
-  input.style.borderColor = '';
+  input.classList.remove('input-error');
+  document.getElementById('emailError').classList.remove('show');
+  goNext();
+}
+
+function validateQ4() {
+  let valid = true;
+  booths.forEach(b => {
+    if (answers['q4_' + b.id] && answers['q4_' + b.id] < 3) {
+      const el = document.getElementById('reason_' + b.id);
+      if (!el.value.trim()) {
+        el.classList.add('input-error');
+        valid = false;
+      } else {
+        el.classList.remove('input-error');
+        answers['q4_' + b.id + '_reason'] = el.value.trim();
+      }
+    }
+  });
+  const errEl = document.getElementById('boothError');
+  if (!valid) { errEl.classList.add('show'); return; }
+  errEl.classList.remove('show');
+  goNext();
+}
+
+function validateQ5() {
+  const text = answers.q5;
+  if (text === '参加する' || text === '参加しない') {
+    const el = document.getElementById('reason5');
+    if (!el.value.trim()) {
+      el.classList.add('input-error');
+      document.getElementById('reason5Error').classList.add('show');
+      el.focus();
+      return;
+    }
+    el.classList.remove('input-error');
+    document.getElementById('reason5Error').classList.remove('show');
+    answers.q5_reason = el.value.trim();
+  }
   goNext();
 }
 
 // === Submit ===
 function submitSurvey() {
-  // Collect remaining text answers
-  answers.q5_reason = document.getElementById('reason5')?.value.trim() || '';
   answers.q7 = document.getElementById('q7text')?.value.trim() || '';
   answers.q8 = document.getElementById('q8text')?.value.trim() || '';
 
-  // Booth reasons
   booths.forEach(b => {
     const el = document.getElementById('reason_' + b.id);
     if (el && el.value.trim()) answers['q4_' + b.id + '_reason'] = el.value.trim();
