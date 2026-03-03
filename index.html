@@ -112,6 +112,14 @@ textarea.text-input{resize:vertical;min-height:100px}
 .complete-title{font-size:1.4rem;font-weight:700;margin-bottom:8px;color:var(--brand)}
 .complete-msg{color:var(--text-sub);line-height:1.8}
 
+/* LINE CTA */
+.line-cta{margin-top:28px;padding:20px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:2px solid #06C755;text-align:center}
+.line-cta-badge{display:inline-block;font-size:.75rem;font-weight:700;color:#fff;background:#06C755;padding:3px 12px;border-radius:20px;margin-bottom:10px}
+.line-cta-title{font-size:1.05rem;font-weight:700;line-height:1.6;margin-bottom:8px}
+.line-cta-desc{font-size:.8rem;color:var(--text-sub);line-height:1.7;margin-bottom:16px}
+.line-cta-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:14px;background:#06C755;color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;font-family:inherit;text-decoration:none;transition:background .2s}
+.line-cta-btn:active{background:#05a848}
+
 /* Loading */
 .loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 .loading.show{display:flex}
@@ -235,6 +243,12 @@ textarea.text-input{resize:vertical;min-height:100px}
       <div class="rive-wrap"><canvas id="snappyComplete" width="320" height="320"></canvas></div>
       <div class="complete-title">ありがとうございました！</div>
       <p class="complete-msg">アンケートを送信しました。<br>本日はご参加いただき<br>誠にありがとうございました。</p>
+      <div class="line-cta">
+        <div class="line-cta-badge">🎉 参加者限定</div>
+        <div class="line-cta-title">イベント参加者限定<br>LINEグループへの招待</div>
+        <p class="line-cta-desc">参加者同士の交流や、今後のイベント情報をお届けします。お気軽にご参加ください！</p>
+        <a href="https://line.me/ti/g/Y6ScPNspxg" target="_blank" rel="noopener" class="line-cta-btn">LINEグループに参加する 💬</a>
+      </div>
     </div>
   </div>
 
