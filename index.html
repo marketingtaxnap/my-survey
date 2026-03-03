@@ -215,38 +215,48 @@ textarea.text-input{resize:vertical;min-height:100px}
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
-  <!-- Slide 6: Q6 -->
+  <!-- Slide 6: Q6 (NEW) -->
   <div class="slide" id="s6">
     <div class="q-number">Q6</div>
-    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？</div>
+    <div class="q-title">タックスナップで一番「これは助かる！」と思う機能はどれですか？</div>
     <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts6"></div>
-    <button class="btn-next" id="nextBtn6" disabled onclick="goNext()">次へ →</button>
+    <div class="options" id="opts6new"></div>
+    <button class="btn-next" id="nextBtn6new" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 7: Q7 -->
   <div class="slide" id="s7">
     <div class="q-number">Q7</div>
-    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
-    <div class="q-note">一言でOKです 💬</div>
-    <textarea class="text-input" id="q7text" placeholder="自由にお書きください"></textarea>
-    <button class="btn-next" onclick="goNext()">次へ →</button>
+    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？</div>
+    <div class="q-subtitle">一つ選んでください</div>
+    <div class="options" id="opts7"></div>
+    <button class="btn-next" id="nextBtn7" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Slide 8: Q8 -->
   <div class="slide" id="s8">
     <div class="q-number">Q8</div>
+    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
+    <div class="q-note">一言でOKです 💬</div>
+    <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
+    <button class="btn-next" onclick="goNext()">次へ →</button>
+    <button class="btn-back" onclick="goBack()">← 戻る</button>
+  </div>
+
+  <!-- Slide 9: Q9 -->
+  <div class="slide" id="s9">
+    <div class="q-number">Q9</div>
     <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください <span class="q-optional">任意</span></div>
     <div class="q-note">些細なことでもOKです 🙏</div>
-    <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
+    <textarea class="text-input" id="q9text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="submitSurvey()">送信する ✉️</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
 
   <!-- Complete -->
-  <div class="slide" id="s9">
+  <div class="slide" id="s10">
     <div class="complete-slide">
       <div class="rive-wrap"><canvas id="snappyComplete" width="320" height="320"></canvas></div>
       <div class="complete-title">ご回答ありがとうございます！</div>
@@ -276,7 +286,7 @@ textarea.text-input{resize:vertical;min-height:100px}
 <script>
 // === Config ===
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbx9Tiz9KOjUGGNHPC71irt-A19Ccb_g91E9JGcTCygKPAjKrFYzxQFImFVmgXXEfwhc/exec?token=jFSpbAoe8zs7sFoiJZfteJ_E7DTP5RT77ZiCW-fSI3M';
-const TOTAL_SLIDES = 9;
+const TOTAL_SLIDES = 10;
 let current = 0;
 const answers = {};
 
@@ -300,7 +310,16 @@ const q5opts = [
   {emoji:'🙅', text:'参加しない'},
   {emoji:'🤔', text:'分からない'}
 ];
-const q6opts = [
+const q6newOpts = [
+  {emoji:'🤖', text:'丸投げ仕分け'},
+  {emoji:'👆', text:'スワイプ仕分け'},
+  {emoji:'📸', text:'レシートのカメラ読み取り'},
+  {emoji:'🔍', text:'税務調査リスクチェック'},
+  {emoji:'📄', text:'申告書類の自動作成'},
+  {emoji:'📱', text:'マイナンバーカードでアプリ内提出'},
+  {emoji:'💬', text:'その他'}
+];
+const q7opts = [
   {emoji:'🤩', text:'ぜひ紹介したい'},
   {emoji:'😊', text:'機会があれば紹介する'},
   {emoji:'😐', text:'あまり紹介しない'},
@@ -319,7 +338,8 @@ function init() {
   buildRadio('opts3', q3opts, 'q3', 'nextBtn3');
   buildBooths();
   buildRadio('opts5', q5opts, 'q5', 'nextBtn5', handleQ5Select);
-  buildRadio('opts6', q6opts, 'q6', 'nextBtn6');
+  buildRadio('opts6new', q6newOpts, 'q6', 'nextBtn6new');
+  buildRadio('opts7', q7opts, 'q7', 'nextBtn7');
   showSlide(0);
   document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') validateEmail(); });
 }
@@ -510,8 +530,8 @@ function validateQ5() {
 
 // === Submit ===
 function submitSurvey() {
-  answers.q7 = document.getElementById('q7text')?.value.trim() || '';
   answers.q8 = document.getElementById('q8text')?.value.trim() || '';
+  answers.q9 = document.getElementById('q9text')?.value.trim() || '';
 
   booths.forEach(b => {
     const el = document.getElementById('reason_' + b.id);
@@ -527,8 +547,8 @@ function submitSurvey() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(answers)
   })
-  .then(() => { loading.classList.remove('show'); showSlide(9); })
-  .catch(() => { loading.classList.remove('show'); showSlide(9); });
+  .then(() => { loading.classList.remove('show'); showSlide(10); })
+  .catch(() => { loading.classList.remove('show'); showSlide(10); });
 }
 
 // === Rive animation ===
@@ -550,7 +570,7 @@ initRive('snappyIntro');
 const origShowSlide = showSlide;
 showSlide = function(n) {
   origShowSlide(n);
-  if (n === 9) initRive('snappyComplete');
+  if (n === 10) initRive('snappyComplete');
 };
 </script>
 </body>
