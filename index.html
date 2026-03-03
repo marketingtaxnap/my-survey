@@ -30,7 +30,12 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .rive-wrap canvas{width:160px;height:160px}
 
 /* Intro */
-.intro-title{font-size:1.3rem;font-weight:700;text-align:center;line-height:1.7;margin-bottom:8px}
+.intro-title{font-size:1.4rem;font-weight:700;text-align:center;line-height:1.7;margin-bottom:8px;background:linear-gradient(135deg,var(--brand),#1a9e5a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
+.intro-title-wrap{text-align:center;margin-bottom:10px}
+.intro-title-inner{display:inline-block;position:relative;padding:10px 28px;font-size:1.4rem;font-weight:700;color:var(--brand-dark);letter-spacing:.05em}
+.intro-title-inner::before{content:'';position:absolute;inset:0;border-radius:40px;background:linear-gradient(135deg,var(--brand-light),#d0f5e0);z-index:-1}
+.intro-title-inner::after{content:'';position:absolute;inset:0;border-radius:40px;border:2px solid var(--brand);opacity:.3;z-index:-1}
+.intro-title-emoji{font-size:1.1rem;margin-right:4px;-webkit-text-fill-color:initial}
 .intro-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;color:#92400e;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:20px;margin:0 auto 16px;text-align:center}
 .intro-badge-wrap{text-align:center}
 .intro-thanks{font-size:.9rem;color:var(--text-sub);text-align:center;line-height:1.8;margin-bottom:24px}
@@ -128,7 +133,7 @@ textarea.text-input{resize:vertical;min-height:100px}
       <div style="border-radius:var(--radius);overflow:hidden"><img src="event-banner.png" alt="駆け込み確定申告ナイト" style="width:100%;display:block"></div>
       <div style="position:absolute;bottom:-50px;right:-25px;width:160px;height:160px"><canvas id="snappyIntro" width="320" height="320" style="width:100%;height:100%"></canvas></div>
     </div>
-    <div class="intro-title">⏱ かんたん2分アンケート</div>
+    <div class="intro-title-wrap"><span class="intro-title-inner"><span class="intro-title-emoji">⏱</span> かんたん2分アンケート</span></div>
     <div class="intro-thanks" style="margin-bottom:12px">あなたの声を聞かせてください！</div>
     <p class="intro-thanks">本日は「駆け込み確定申告ナイト」に<br>ご参加いただき、誠にありがとうございました！</p>
     <div class="q-subtitle" style="margin-bottom:8px">メールアドレス</div>
