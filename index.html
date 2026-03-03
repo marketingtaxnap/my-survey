@@ -448,20 +448,32 @@ function validateEmail() {
 
 function validateQ4() {
   let valid = true;
+  const errEl = document.getElementById('boothError');
+  // Check all selected booths have star ratings
+  let hasSelected = false;
   booths.forEach(b => {
-    if (answers['q4_' + b.id] && answers['q4_' + b.id] < 3) {
-      const el = document.getElementById('reason_' + b.id);
-      if (!el.value.trim()) {
-        el.classList.add('input-error');
+    const checked = document.querySelector('#boothChecks .booth-check.checked input[value="' + b.id + '"]');
+    if (checked) {
+      hasSelected = true;
+      if (!answers['q4_' + b.id]) {
         valid = false;
-      } else {
-        el.classList.remove('input-error');
-        answers['q4_' + b.id + '_reason'] = el.value.trim();
+      }
+      if (answers['q4_' + b.id] && answers['q4_' + b.id] < 3) {
+        const el = document.getElementById('reason_' + b.id);
+        if (!el.value.trim()) {
+          el.classList.add('input-error');
+          valid = false;
+        } else {
+          el.classList.remove('input-error');
+          answers['q4_' + b.id + '_reason'] = el.value.trim();
+        }
       }
     }
   });
-  const errEl = document.getElementById('boothError');
-  if (!valid) { errEl.classList.add('show'); return; }
+  if (!valid) {
+    errEl.textContent = hasSelected && !valid ? '選択したブースの星評価と、低評価の場合は理由を入力してください' : '低評価の理由を入力してください';
+    errEl.classList.add('show'); return;
+  }
   errEl.classList.remove('show');
   goNext();
 }
