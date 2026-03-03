@@ -41,8 +41,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 /* Question */
 .q-number{font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:6px}
 .q-title{font-size:1.15rem;font-weight:700;line-height:1.6;margin-bottom:6px}
-.q-required{display:inline-block;font-size:.7rem;font-weight:700;color:#fff;background:#e74c3c;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
-.q-optional{display:inline-block;font-size:.7rem;font-weight:700;color:var(--text-sub);background:#e0e0e0;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.q-required,.q-optional{display:none}
 .q-subtitle{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
 .q-note{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
 
@@ -134,7 +133,7 @@ textarea.text-input{resize:vertical;min-height:100px}
       <div class="intro-feat"><span class="intro-feat-icon">📱</span><span>タップで回答、すぐ終わります</span></div>
       <div class="intro-feat"><span class="intro-feat-icon">💡</span><span>あなたの声がサービス改善に繋がります</span></div>
     </div>
-    <div class="q-subtitle" style="margin-bottom:8px">メールアドレス <span class="q-required">必須</span></div>
+    <div class="q-subtitle" style="margin-bottom:8px">メールアドレス</div>
     <input type="email" class="email-input" id="email" placeholder="example@email.com" inputmode="email" autocomplete="email">
     <div class="error-msg" id="emailError">有効なメールアドレスを入力してください</div>
     <button class="btn-next" onclick="validateEmail()">アンケートを始める 🚀</button>
@@ -143,7 +142,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 1: Q1 -->
   <div class="slide" id="s1">
     <div class="q-number">Q1</div>
-    <div class="q-title">イベント全体の満足度を教えてください <span class="q-required">必須</span></div>
+    <div class="q-title">イベント全体の満足度を教えてください</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="stars" id="stars1"></div>
     <button class="btn-next" id="nextBtn1" disabled onclick="goNext()">次へ →</button>
@@ -153,7 +152,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 2: Q2 -->
   <div class="slide" id="s2">
     <div class="q-number">Q2</div>
-    <div class="q-title">確定申告への疑問は解消されましたか？ <span class="q-required">必須</span></div>
+    <div class="q-title">確定申告への疑問は解消されましたか？</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts2"></div>
     <button class="btn-next" id="nextBtn2" disabled onclick="goNext()">次へ →</button>
@@ -163,7 +162,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 3: Q3 -->
   <div class="slide" id="s3">
     <div class="q-number">Q3</div>
-    <div class="q-title">タックスナップに対する疑問は解消されましたか？ <span class="q-required">必須</span></div>
+    <div class="q-title">タックスナップに対する疑問は解消されましたか？</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts3"></div>
     <button class="btn-next" id="nextBtn3" disabled onclick="goNext()">次へ →</button>
@@ -173,7 +172,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 4: Q4 -->
   <div class="slide" id="s4">
     <div class="q-number">Q4</div>
-    <div class="q-title">参加したブースの満足度を教えてください <span class="q-required">必須</span></div>
+    <div class="q-title">参加したブースの満足度を教えてください</div>
     <div class="q-subtitle">参加したブースを選んで、それぞれ評価してください</div>
     <div class="booth-checks" id="boothChecks"></div>
     <div class="booth-ratings" id="boothRatings"></div>
@@ -185,7 +184,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 5: Q5 -->
   <div class="slide" id="s5">
     <div class="q-number">Q5</div>
-    <div class="q-title">来年同じようなイベントがあった場合、参加したいと思いますか？ <span class="q-required">必須</span></div>
+    <div class="q-title">来年同じようなイベントがあった場合、参加したいと思いますか？</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts5"></div>
     <div class="followup" id="followup5">
@@ -199,7 +198,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 6: Q6 -->
   <div class="slide" id="s6">
     <div class="q-number">Q6</div>
-    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？ <span class="q-required">必須</span></div>
+    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts6"></div>
     <button class="btn-next" id="nextBtn6" disabled onclick="goNext()">次へ →</button>
@@ -209,7 +208,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 7: Q7 -->
   <div class="slide" id="s7">
     <div class="q-number">Q7</div>
-    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
+    <div class="q-title">イベントの中で、一番よかったことは？</div>
     <div class="q-note">一言でOKです 💬</div>
     <textarea class="text-input" id="q7text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="goNext()">次へ →</button>
@@ -219,7 +218,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 8: Q8 -->
   <div class="slide" id="s8">
     <div class="q-number">Q8</div>
-    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください <span class="q-optional">任意</span></div>
+    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください</div>
     <div class="q-note">些細なことでもOKです 🙏</div>
     <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="submitSurvey()">送信する ✉️</button>
