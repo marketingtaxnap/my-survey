@@ -41,7 +41,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 /* Question */
 .q-number{font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:6px}
 .q-title{font-size:1.15rem;font-weight:700;line-height:1.6;margin-bottom:6px}
-.q-required,.q-optional{display:none}
+.q-optional{display:inline-block;font-size:.7rem;font-weight:700;color:var(--text-sub);background:#e0e0e0;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
 .q-subtitle{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
 .q-note{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
 
@@ -208,7 +208,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 7: Q7 -->
   <div class="slide" id="s7">
     <div class="q-number">Q7</div>
-    <div class="q-title">イベントの中で、一番よかったことは？</div>
+    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
     <div class="q-note">一言でOKです 💬</div>
     <textarea class="text-input" id="q7text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="goNext()">次へ →</button>
@@ -218,7 +218,7 @@ textarea.text-input{resize:vertical;min-height:100px}
   <!-- Slide 8: Q8 -->
   <div class="slide" id="s8">
     <div class="q-number">Q8</div>
-    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください</div>
+    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください <span class="q-optional">任意</span></div>
     <div class="q-note">些細なことでもOKです 🙏</div>
     <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
     <button class="btn-next" onclick="submitSurvey()">送信する ✉️</button>
