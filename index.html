@@ -221,6 +221,9 @@ textarea.text-input{resize:vertical;min-height:100px}
     <div class="q-title">タックスナップで一番「これは助かる！」と思う機能はどれですか？</div>
     <div class="q-subtitle">一つ選んでください</div>
     <div class="options" id="opts6new"></div>
+    <div class="followup" id="followup6">
+      <textarea class="text-input" id="q6other" placeholder="具体的に教えてください"></textarea>
+    </div>
     <button class="btn-next" id="nextBtn6new" disabled onclick="goNext()">次へ →</button>
     <button class="btn-back" onclick="goBack()">← 戻る</button>
   </div>
@@ -338,7 +341,7 @@ function init() {
   buildRadio('opts3', q3opts, 'q3', 'nextBtn3');
   buildBooths();
   buildRadio('opts5', q5opts, 'q5', 'nextBtn5', handleQ5Select);
-  buildRadio('opts6new', q6newOpts, 'q6', 'nextBtn6new');
+  buildRadio('opts6new', q6newOpts, 'q6', 'nextBtn6new', handleQ6Select);
   buildRadio('opts7', q7opts, 'q7', 'nextBtn7');
   showSlide(0);
   document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') validateEmail(); });
@@ -382,6 +385,17 @@ function buildRadio(containerId, opts, key, nextBtnId, onSelect) {
     });
     wrap.appendChild(btn);
   });
+}
+
+// === Q6 handler ===
+function handleQ6Select(text) {
+  const followup = document.getElementById('followup6');
+  if (text === 'その他') {
+    followup.classList.add('show');
+  } else {
+    followup.classList.remove('show');
+    document.getElementById('q6other').value = '';
+  }
 }
 
 // === Q5 handler ===
@@ -530,6 +544,7 @@ function validateQ5() {
 
 // === Submit ===
 function submitSurvey() {
+  answers.q6_other = document.getElementById('q6other')?.value.trim() || '';
   answers.q8 = document.getElementById('q8text')?.value.trim() || '';
   answers.q9 = document.getElementById('q9text')?.value.trim() || '';
 
