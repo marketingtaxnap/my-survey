@@ -2,592 +2,1164 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>イベントアンケート | タックスナップ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FY25 ユーザーアンケート</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@rive-app/canvas@2.7.0"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--brand:#27BA74;--brand-light:#e8f8ef;--brand-dark:#1e9a5e;--bg:#f8faf9;--text:#1a1a1a;--text-sub:#666;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,.08)}
+:root{--brand:#27BA74;--brand-light:#e8f8f0;--brand-dark:#1e9a5e;--bg:#f7f9fc;--card:#fff;--text:#222;--text-sub:#666;--text-light:#999;--error:#e74c3c;--error-bg:#fef0f0;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,.06)}
 html{font-size:16px}
-body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent}
-
-/* Progress */
-.progress-wrap{position:fixed;top:0;left:0;right:0;z-index:100;background:#fff;padding:12px 20px 10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.progress-bar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased}
+.container{width:100%;max-width:480px;margin:0 auto;padding:0 16px;position:relative;min-height:100dvh;overflow:hidden}
+/* progress */
+.progress-wrap{position:sticky;top:0;z-index:100;background:var(--bg);padding:40px 0 4px}
+.progress-track{position:relative;height:6px;border-radius:3px;background:#e0e0e0;overflow:visible}
 .progress-fill{height:100%;background:var(--brand);border-radius:3px;transition:width .4s ease}
-.progress-text{font-size:.75rem;color:var(--text-sub);margin-top:6px;text-align:right}
-
-/* Slide */
-.survey-container{flex:1;display:flex;align-items:center;justify-content:center;padding:80px 20px 40px}
-.slide{display:none;width:100%;max-width:480px;animation:slideIn .35s ease}
-.slide.active{display:block}
-@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-
-/* Rive canvas */
-.rive-wrap{text-align:center;margin-bottom:12px}
-.rive-wrap canvas{width:160px;height:160px}
-
-/* Intro */
-.intro-title{font-size:1.4rem;font-weight:700;text-align:center;line-height:1.7;margin-bottom:8px;background:linear-gradient(135deg,var(--brand),#1a9e5a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
-.intro-title-wrap{text-align:center;margin-bottom:10px}
-.intro-title-inner{display:inline-block;position:relative;padding:10px 28px;font-size:1.4rem;font-weight:700;color:var(--brand-dark);letter-spacing:.05em}
-.intro-title-inner::before{content:'';position:absolute;inset:0;border-radius:40px;background:linear-gradient(135deg,var(--brand-light),#d0f5e0);z-index:-1}
-.intro-title-inner::after{content:'';position:absolute;inset:0;border-radius:40px;border:2px solid var(--brand);opacity:.3;z-index:-1}
-.intro-title-emoji{font-size:1.1rem;margin-right:4px;-webkit-text-fill-color:initial}
-.intro-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;color:#92400e;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:20px;margin:0 auto 16px;text-align:center}
-.intro-badge-wrap{text-align:center}
-.intro-thanks{font-size:.9rem;color:var(--text-sub);text-align:center;line-height:1.8;margin-bottom:24px}
-.intro-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.intro-feat{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);font-size:.9rem}
-.intro-feat-icon{font-size:1.3rem;flex-shrink:0}
-
-/* Question */
-.q-number{font-size:.8rem;font-weight:700;color:var(--brand);margin-bottom:6px}
-.q-title{font-size:1.15rem;font-weight:700;line-height:1.6;margin-bottom:6px}
-.q-optional{display:inline-block;font-size:.7rem;font-weight:700;color:var(--text-sub);background:#e0e0e0;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
-.q-subtitle{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
-.q-note{font-size:.8rem;color:var(--text-sub);margin-bottom:20px}
-
-/* Options */
-.options{display:flex;flex-direction:column;gap:10px}
-.opt-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 18px;border:2px solid #e5e7eb;border-radius:var(--radius);background:#fff;font-size:.95rem;font-family:inherit;color:var(--text);cursor:pointer;transition:all .15s}
-.opt-btn:active{transform:scale(.98)}
-.opt-btn.selected{border-color:var(--brand);background:var(--brand-light);color:var(--brand-dark);font-weight:500}
-.opt-btn .opt-emoji{font-size:1.2rem;flex-shrink:0}
-.opt-btn .opt-check{width:20px;height:20px;border:2px solid #d0d0d0;border-radius:50%;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.opt-btn.selected .opt-check{border-color:var(--brand);background:var(--brand)}
-.opt-btn.selected .opt-check::after{content:'✓';color:#fff;font-size:.7rem;font-weight:700}
-
-/* Star rating */
-.stars{display:flex;gap:8px;direction:rtl;justify-content:flex-end}
-.stars input{display:none}
-.stars label{font-size:2.4rem;color:#d0d0d0;cursor:pointer;transition:all .2s;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.1);filter:drop-shadow(0 1px 1px rgba(0,0,0,.08))}
-.stars label:hover,.stars label:hover~label,.stars input:checked~label{color:#f5b731;text-shadow:0 0 12px rgba(245,183,49,.5),0 2px 4px rgba(245,183,49,.3);filter:drop-shadow(0 2px 4px rgba(245,183,49,.35));transform:scale(1.15)}
-.stars input:checked~label{animation:popStar .3s ease}
-@keyframes popStar{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1.15)}}
-.star-reason{margin-top:10px;display:none}
-.star-reason.show{display:block}
-
-/* Text input */
-.text-input,.email-input{width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:var(--radius);font-size:1rem;font-family:inherit;background:#fff;transition:border-color .2s}
-.text-input:focus,.email-input:focus{outline:none;border-color:var(--brand)}
-textarea.text-input{resize:vertical;min-height:100px}
-.input-error{border-color:#e74c3c !important}
-.error-msg{font-size:.8rem;color:#e74c3c;margin-top:6px;display:none}
+.progress-mascot{position:absolute;bottom:4px;transition:left .6s cubic-bezier(.34,1.56,.64,1);pointer-events:none;line-height:1}
+.progress-mascot canvas{width:36px;height:36px;display:block}
+.progress-mascot.walk{animation:mascotWalk .3s ease 2}
+@keyframes mascotWalk{0%{transform:translateY(0)}25%{transform:translateY(-5px)}50%{transform:translateY(0)}75%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+/* slides */
+.slide-area{position:relative;width:100%;flex:1}
+.slide{position:absolute;top:0;left:0;width:100%;opacity:0;transform:translateX(40px);transition:all .4s ease;pointer-events:none;padding-bottom:80px}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;position:relative}
+.slide.exit-left{opacity:0;transform:translateX(-40px)}
+/* intro */
+.intro-card{background:var(--card);border-radius:var(--radius);padding:0;box-shadow:var(--shadow);margin-top:24px;overflow:hidden}
+.intro-hero{background:linear-gradient(180deg,#e8f8f0 0%,#fff 100%);padding:28px 20px 16px;text-align:center;position:relative}
+.intro-hero .deco{position:absolute;opacity:.15;font-size:22px}
+.intro-hero .deco-1{top:10px;left:16px;transform:rotate(-15deg)}
+.intro-hero .deco-2{top:8px;right:20px;transform:rotate(10deg)}
+.intro-hero .deco-3{bottom:12px;right:14px;transform:rotate(20deg)}
+.intro-hero canvas{width:112px;height:112px;margin:0 auto 8px;display:block;position:relative;z-index:1}
+.intro-speech{display:inline-block;background:#fff;border-radius:16px 16px 16px 4px;box-shadow:0 1px 6px rgba(0,0,0,.06);padding:8px 16px;margin-bottom:14px;position:relative;opacity:0;transform:translateY(8px);transition:all .4s ease}
+.intro-speech.show{opacity:1;transform:translateY(0)}
+.intro-speech p{font-size:13px;font-weight:700;color:var(--brand)}
+.intro-speech::after{content:'';position:absolute;bottom:-5px;left:20px;width:10px;height:10px;background:#fff;transform:rotate(45deg);box-shadow:1px 1px 2px rgba(0,0,0,.04)}
+.intro-body{padding:0 20px 24px}
+.intro-badge{display:inline-block;background:var(--brand);color:#fff;font-size:13px;font-weight:700;padding:5px 16px;border-radius:50px;margin-bottom:12px}
+.intro-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.5}
+.intro-sub{font-size:13px;color:var(--text-sub);margin-bottom:20px;line-height:1.7}
+.intro-email-wrap{position:relative;margin-bottom:16px}
+.intro-email-wrap .email-check{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:20px;opacity:0;transition:opacity .3s}
+.intro-email-wrap .email-check.show{opacity:1;animation:optionPop .3s ease}
+/* question card */
+.q-card{background:var(--card);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);margin-top:16px}
+.q-label{font-size:11px;color:var(--text-light);margin-bottom:4px}
+.q-number{font-size:12px;color:var(--brand);font-weight:700;margin-bottom:4px}
+.q-hint{font-size:11px;color:var(--text-light);margin-bottom:10px}
+.q-text{font-size:15px;font-weight:700;line-height:1.7;margin-bottom:20px;white-space:pre-line}
+.optional-badge{display:inline-block;background:#eee;color:#999;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:6px;font-weight:400}
+/* SA options */
+.sa-option{display:flex;align-items:center;padding:13px 16px;border:2px solid #e8e8e8;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:14px;line-height:1.5;user-select:none}
+.sa-option:hover{border-color:var(--brand-light);background:var(--brand-light)}
+.sa-option.selected{border-color:var(--brand);background:var(--brand-light);font-weight:500;animation:optionPop .3s ease}
+.sa-option .radio{width:20px;height:20px;border:2px solid #ccc;border-radius:50%;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.sa-option.selected .radio{border-color:var(--brand);background:var(--brand)}
+.sa-option.selected .radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+/* MA options */
+.ma-option{display:flex;align-items:flex-start;padding:13px 16px;border:2px solid #e8e8e8;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:14px;line-height:1.5;user-select:none}
+.ma-option:hover{border-color:var(--brand-light);background:var(--brand-light)}
+.ma-option.selected{border-color:var(--brand);background:var(--brand-light);font-weight:500;animation:optionPop .3s ease}
+.ma-option .checkbox{width:20px;height:20px;border:2px solid #ccc;border-radius:5px;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.ma-option.selected .checkbox{border-color:var(--brand);background:var(--brand)}
+.ma-option.selected .checkbox::after{content:'\2713';color:#fff;font-size:13px;font-weight:700}
+@keyframes optionPop{0%{transform:scale(1)}25%{transform:scale(1.035)}50%{transform:scale(.99)}100%{transform:scale(1)}}
+/* micro sparkle particles */
+.micro-particle{position:fixed;pointer-events:none;z-index:9999;font-size:14px;opacity:0;animation:microFloat .8s ease forwards}
+@keyframes microFloat{0%{opacity:1;transform:translate(0,0) scale(.8)}50%{opacity:.8}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}}
+/* inline text */
+.inline-text{width:100%;margin-top:8px;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:'Noto Sans JP',sans-serif;resize:vertical;min-height:40px;transition:border-color .2s}
+.inline-text:focus{outline:none;border-color:var(--brand)}
+/* free text */
+.fa-textarea{width:100%;padding:14px;border:1.5px solid #ddd;border-radius:12px;font-size:14px;font-family:'Noto Sans JP',sans-serif;resize:vertical;min-height:100px;transition:border-color .2s;line-height:1.6}
+.fa-textarea:focus{outline:none;border-color:var(--brand)}
+/* NPS stars */
+.nps-wrap{display:flex;flex-direction:column;align-items:center}
+.nps-labels{display:flex;justify-content:space-between;width:100%;margin-bottom:6px}
+.nps-label-item{display:flex;flex-direction:column;align-items:center;gap:2px}
+.nps-label-icon{font-size:28px;line-height:1}
+.nps-label-text{font-size:10px;color:var(--text-light)}
+.nps-stars{display:flex;gap:3px;justify-content:center;flex-wrap:nowrap;width:100%}
+.nps-star{width:32px;height:32px;border-radius:50%;border:2px solid #e0e0e0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--text-sub);background:#fff;user-select:none;position:relative;flex-shrink:0;overflow:visible}
+.nps-star:hover{border-color:var(--brand);transform:scale(1.08)}
+.nps-star.selected{border-color:transparent;background:var(--brand);color:#fff;animation:npsDrop .45s cubic-bezier(.3,1.5,.6,1);box-shadow:0 2px 10px rgba(39,186,116,.35)}
+@keyframes npsDrop{0%{transform:scale(.3) translateY(-20px);opacity:0}40%{transform:scale(1.15) translateY(2px);opacity:1}60%{transform:scale(.92) translateY(-1px)}80%{transform:scale(1.04)}100%{transform:scale(1) translateY(0)}}
+.nps-ripple{position:absolute;width:100%;height:100%;top:0;left:0;border-radius:50%;pointer-events:none;border:2px solid var(--brand);animation:npsRipple .6s ease forwards;opacity:0}
+@keyframes npsRipple{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.2);opacity:0}}
+/* NPS inline FA */
+.nps-fa-wrap{margin-top:20px;padding-top:16px;border-top:1px solid #eee}
+.nps-fa-wrap.hidden-step{display:none}
+/* matrix */
+.matrix-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:2px solid #eee;transition:border-color .3s,box-shadow .3s}
+.matrix-card.answered{border-color:var(--brand);box-shadow:0 0 0 1px rgba(39,186,116,.15)}
+.matrix-card .concept{font-size:14px;font-weight:600;line-height:1.6;margin-bottom:14px}
+.likert-row{display:flex;gap:0;justify-content:space-between}
+.likert-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px 8px;cursor:pointer;transition:all .2s;user-select:none;border-radius:10px;background:transparent}
+.likert-btn:hover{background:var(--brand-light)}
+.likert-btn .likert-icon{font-size:22px;line-height:1;transition:transform .2s}
+.likert-btn .likert-label{font-size:9px;color:var(--text-light);line-height:1.2;text-align:center}
+.likert-btn.selected{background:var(--brand-light);animation:optionPop .3s ease}
+.likert-btn.selected .likert-icon{transform:scale(1.2)}
+.likert-btn.selected .likert-label{color:var(--brand);font-weight:700}
+/* Q35 inline steps */
+.q35-step{margin-top:20px;padding-top:20px;border-top:1px solid #eee}
+.q35-step.hidden-step{display:none}
+.q35-step .q-text{font-size:14px;font-weight:600;margin-bottom:14px}
+/* Q36/Q37 CTA */
+.cta-card{background:var(--card);border-radius:var(--radius);padding:32px 20px;box-shadow:var(--shadow);margin-top:16px;text-align:center}
+.cta-card .q-number{text-align:left}
+.cta-card .cta-text{font-size:15px;font-weight:500;line-height:1.7;margin-bottom:24px;color:var(--text)}
+.cta-card .cta-sub{font-size:12px;color:var(--text-light);margin-bottom:20px;line-height:1.6}
+.cta-ok{display:inline-block;padding:16px 48px;background:var(--brand);color:#fff;border:none;border-radius:50px;font-size:18px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(39,186,116,.3)}
+.cta-ok:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(39,186,116,.4)}
+.cta-no{background:#f0f0f0;color:var(--text-sub);box-shadow:none}
+.cta-no:hover{background:#e8e8e8;transform:translateY(-2px);box-shadow:none}
+.cta-ok.cta-selected{transform:scale(1.05);box-shadow:0 4px 20px rgba(39,186,116,.4)}
+.cta-no.cta-selected{background:var(--text-sub);color:#fff;transform:scale(1.05)}
+.cta-ok:active{transform:scale(.96)}
+.cta-ok.done{background:#f0f0f0;color:var(--text-light);box-shadow:none;pointer-events:none}
+.cta-skip{display:block;margin:14px auto 0;background:none;border:none;color:var(--text-light);font-size:13px;font-family:'Noto Sans JP',sans-serif;cursor:pointer}
+.cta-skip:hover{color:var(--text-sub)}
+.confetti{position:fixed;pointer-events:none;z-index:9999;font-size:20px;animation:confettiFall 1s ease forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(120px) rotate(360deg) scale(.6)}}
+/* buttons */
+.btn-next{display:block;width:100%;padding:15px;background:var(--brand);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all .2s;margin-top:16px}
+.btn-next:hover{background:var(--brand-dark)}
+.btn-next:disabled{background:#ccc;cursor:not-allowed}
+.btn-back{display:block;width:100%;padding:12px;background:transparent;color:var(--text-light);border:none;font-size:13px;font-family:'Noto Sans JP',sans-serif;cursor:pointer;margin-top:4px}
+.btn-back:hover{color:var(--text-sub)}
+/* email input */
+.email-input{width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:12px;font-size:15px;font-family:'Noto Sans JP',sans-serif;transition:border-color .2s}
+.email-input:focus{outline:none;border-color:var(--brand)}
+.email-input.error{border-color:var(--error)}
+/* error */
+.error-msg{color:var(--error);font-size:12px;margin-top:6px;display:none;padding:6px 10px;background:var(--error-bg);border-radius:8px}
 .error-msg.show{display:block}
-
-/* Booth checkboxes */
-.booth-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.booth-check{display:flex;align-items:center;gap:10px;padding:12px 16px;border:2px solid #e5e7eb;border-radius:var(--radius);background:#fff;cursor:pointer;transition:all .15s}
-.booth-check.checked{border-color:var(--brand);background:var(--brand-light)}
-.booth-check input{display:none}
-.booth-check .checkmark{width:22px;height:22px;border:2px solid #ccc;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
-.booth-check.checked .checkmark{background:var(--brand);border-color:var(--brand)}
-.booth-check.checked .checkmark::after{content:'✓';color:#fff;font-size:.85rem;font-weight:700}
-.booth-check .booth-emoji{font-size:1.2rem;flex-shrink:0}
-.booth-check span:last-child{font-size:.9rem}
-
-/* Booth ratings */
-.booth-ratings{display:flex;flex-direction:column;gap:16px;margin-top:8px}
-.booth-rating-item{display:none;padding:14px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
-.booth-rating-item.show{display:block}
-.booth-rating-label{font-size:.85rem;font-weight:500;margin-bottom:8px}
-
-/* Buttons */
-.btn-next{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:24px;padding:14px 32px;background:var(--brand);color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;width:100%}
-.btn-next:active{background:var(--brand-dark);transform:scale(.98)}
-.btn-next:disabled{background:#ccc;cursor:not-allowed;transform:none}
-.btn-back{display:flex;align-items:center;justify-content:center;margin-top:10px;padding:10px;background:none;border:none;color:var(--text-sub);font-size:.85rem;font-family:inherit;cursor:pointer;width:100%}
-.btn-back:hover{color:var(--text)}
-
-/* Follow-up */
-.followup{margin-top:12px;display:none}
-.followup.show{display:block}
-
-/* Complete */
-.complete-slide{text-align:center}
-.complete-icon{font-size:3.5rem;margin-bottom:16px}
-.complete-title{font-size:1.4rem;font-weight:700;margin-bottom:8px;color:var(--brand)}
-.complete-msg{color:var(--text-sub);line-height:1.8}
-
-/* LINE CTA */
-.line-cta{margin-top:28px;padding:24px 20px;background:linear-gradient(135deg,#fffdf5,#fef3c7,#fdf6e3);border-radius:16px;box-shadow:0 4px 24px rgba(180,130,20,.15);border:2px solid #d4a017;text-align:center;position:relative;overflow:hidden}
-.line-cta::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(212,160,23,.15) 0%,transparent 70%);border-radius:50%}
-.line-cta::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(212,160,23,.1) 0%,transparent 70%);border-radius:50%}
-.line-cta-sparkle{font-size:1.8rem;margin-bottom:6px;animation:sparkle 2s ease infinite}
-@keyframes sparkle{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.2) rotate(10deg)}}
-.line-cta-title{font-size:1.1rem;font-weight:700;line-height:1.7;margin-bottom:16px;color:#8b6914}
-.line-cta-title .line-green{color:#06C755;font-weight:700}
-.line-cta-benefits{text-align:left;display:flex;flex-direction:column;gap:10px;margin-top:16px;position:relative;z-index:1}
-.line-benefit{display:flex;align-items:flex-start;gap:8px;font-size:.88rem;line-height:1.6;padding:10px 12px;background:rgba(255,255,255,.85);border-radius:10px;box-shadow:0 1px 4px rgba(180,130,20,.1);border:1px solid rgba(212,160,23,.2)}
-.line-benefit strong{color:#8b6914}
-.line-cta-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:16px;background:linear-gradient(135deg,#06C755,#04a648);color:#fff;border:none;border-radius:var(--radius);font-size:1.05rem;font-weight:700;font-family:inherit;text-decoration:none;transition:all .2s;box-shadow:0 4px 12px rgba(6,199,85,.3);animation:ctaPulse 2.5s ease infinite;position:relative;z-index:1;margin-top:16px}
-@keyframes ctaPulse{0%,100%{box-shadow:0 4px 12px rgba(6,199,85,.3)}50%{box-shadow:0 4px 20px rgba(6,199,85,.5)}}
-.line-cta-btn:active{transform:scale(.97)}
-.line-cta-note{font-size:.72rem;color:#8b6914;margin-top:10px;position:relative;z-index:1}
-
-/* Loading */
-.loading{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.loading.show{display:flex}
-.spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
+/* completion */
+.complete-card{background:var(--card);border-radius:var(--radius);padding:32px 20px;box-shadow:var(--shadow);margin-top:40px;text-align:center}
+.complete-card .rive-complete{width:150px;height:150px;margin:0 auto 20px}
+.complete-card .done-text{font-size:20px;font-weight:700;color:var(--brand);margin-bottom:12px}
+.complete-card .done-sub{font-size:14px;color:var(--text)}
+/* submitting overlay */
+.submitting{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+.submitting .spinner{width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.submitting p{font-size:14px;color:var(--text-sub)}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-
-<!-- Progress -->
-<div class="progress-wrap">
-  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="progress-text" id="progressText"></div>
-</div>
-
-<div class="survey-container">
-
-  <!-- Slide 0: Intro + Email -->
-  <div class="slide" id="s0">
-    <div style="position:relative;margin-bottom:35px">
-      <div style="border-radius:var(--radius);overflow:hidden"><img src="event-banner.png" alt="駆け込み確定申告ナイト" style="width:100%;display:block"></div>
-      <div style="position:absolute;bottom:-35px;right:-15px;width:100px;height:100px"><canvas id="snappyIntro" width="200" height="200" style="width:100%;height:100%"></canvas></div>
-    </div>
-    <div class="intro-title-wrap"><span class="intro-title-inner"><span class="intro-title-emoji">⏱</span> かんたん2分アンケート</span></div>
-    <div class="intro-thanks" style="margin-bottom:12px">あなたの声を聞かせてください！</div>
-    <p class="intro-thanks">この度は「駆け込み確定申告ナイト」に<br>ご参加いただき、誠にありがとうございました！</p>
-    <div class="q-subtitle" style="margin-bottom:8px">メールアドレス</div>
-    <input type="email" class="email-input" id="email" placeholder="example@email.com" inputmode="email" autocomplete="email">
-    <div class="error-msg" id="emailError">有効なメールアドレスを入力してください</div>
-    <button class="btn-next" onclick="validateEmail()">アンケートを始める 🚀</button>
-  </div>
-
-  <!-- Slide 1: Q1 -->
-  <div class="slide" id="s1">
-    <div class="q-number">Q1</div>
-    <div class="q-title">イベント全体の満足度を教えてください</div>
-    <div class="stars" id="stars1"></div>
-    <button class="btn-next" id="nextBtn1" disabled onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 2: Q2 -->
-  <div class="slide" id="s2">
-    <div class="q-number">Q2</div>
-    <div class="q-title">確定申告への疑問は解消されましたか？</div>
-    <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts2"></div>
-    <button class="btn-next" id="nextBtn2" disabled onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 3: Q3 -->
-  <div class="slide" id="s3">
-    <div class="q-number">Q3</div>
-    <div class="q-title">タックスナップに対する疑問は解消されましたか？</div>
-    <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts3"></div>
-    <button class="btn-next" id="nextBtn3" disabled onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 4: Q4 -->
-  <div class="slide" id="s4">
-    <div class="q-number">Q4</div>
-    <div class="q-title">参加したブースの満足度を教えてください</div>
-    <div class="q-subtitle">参加したブースを選んで、それぞれ評価してください</div>
-    <div class="booth-checks" id="boothChecks"></div>
-    <div class="booth-ratings" id="boothRatings"></div>
-    <div class="error-msg" id="boothError">低評価の理由を入力してください</div>
-    <button class="btn-next" id="nextBtn4" onclick="validateQ4()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 5: Q5 -->
-  <div class="slide" id="s5">
-    <div class="q-number">Q5</div>
-    <div class="q-title">来年同じようなイベントがあった場合、参加したいと思いますか？</div>
-    <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts5"></div>
-    <div class="followup" id="followup5">
-      <textarea class="text-input" id="reason5" placeholder="理由を教えてください"></textarea>
-      <div class="error-msg" id="reason5Error">よければ理由も教えていただけると嬉しいです 🙏</div>
-    </div>
-    <button class="btn-next" id="nextBtn5" disabled onclick="validateQ5()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 6: Q6 (NEW) -->
-  <div class="slide" id="s6">
-    <div class="q-number">Q6</div>
-    <div class="q-title">タックスナップで一番「これは助かる！」と思う機能はどれですか？</div>
-    <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts6new"></div>
-    <div class="followup" id="followup6">
-      <textarea class="text-input" id="q6other" placeholder="具体的に教えてください"></textarea>
-    </div>
-    <button class="btn-next" id="nextBtn6new" disabled onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 7: Q7 -->
-  <div class="slide" id="s7">
-    <div class="q-number">Q7</div>
-    <div class="q-title">友人や知り合いにタックスナップを紹介したいと思いますか？</div>
-    <div class="q-subtitle">一つ選んでください</div>
-    <div class="options" id="opts7"></div>
-    <button class="btn-next" id="nextBtn7" disabled onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 8: Q8 -->
-  <div class="slide" id="s8">
-    <div class="q-number">Q8</div>
-    <div class="q-title">イベントの中で、一番よかったことは？ <span class="q-optional">任意</span></div>
-    <div class="q-note">一言でOKです 💬</div>
-    <textarea class="text-input" id="q8text" placeholder="自由にお書きください"></textarea>
-    <button class="btn-next" onclick="goNext()">次へ →</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Slide 9: Q9 -->
-  <div class="slide" id="s9">
-    <div class="q-number">Q9</div>
-    <div class="q-title">イベントの中でこうしてほしかった、改善点があれば教えてください <span class="q-optional">任意</span></div>
-    <div class="q-note">些細なことでもOKです 🙏</div>
-    <textarea class="text-input" id="q9text" placeholder="自由にお書きください"></textarea>
-    <button class="btn-next" onclick="submitSurvey()">送信する ✉️</button>
-    <button class="btn-back" onclick="goBack()">← 戻る</button>
-  </div>
-
-  <!-- Complete -->
-  <div class="slide" id="s10">
-    <div class="complete-slide">
-      <div class="rive-wrap"><canvas id="snappyComplete" width="320" height="320"></canvas></div>
-      <div class="complete-title">ご回答ありがとうございます！</div>
-      <p class="complete-msg">アンケートを送信しました。</p>
-      <div class="line-cta">
-        <div class="line-cta-sparkle">✨</div>
-        <div class="line-cta-title">「駆け込み確定申告ナイト」<br>参加者限定<span class="line-green">LINEグループ</span>に<br>ご招待！</div>
-        <a href="https://line.me/ti/g/Y6ScPNspxg" target="_blank" rel="noopener" class="line-cta-btn">🎁 LINEグループに参加する</a>
-        <div class="line-cta-benefits">
-          <div class="line-benefit">📄 <strong>税理士作成の資料</strong>をプレゼント</div>
-          <div class="line-benefit">🔑 ここだけの<strong>限定情報</strong>を配信</div>
-          <div class="line-benefit">💬 参加者同士で<strong>交流・質問</strong>できる</div>
-        </div>
-        <p class="line-cta-note">※ 参加は任意です。いつでも退出できます。</p>
+<div class="container" id="app">
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="progress-mascot" id="progressMascot" style="left:0%">
+        <canvas id="riveMascot" width="72" height="72"></canvas>
       </div>
     </div>
   </div>
-
+  <div class="slide-area" id="slideArea"></div>
 </div>
-
-<!-- Loading -->
-<div class="loading" id="loading">
-  <div class="spinner"></div>
-  <div style="font-size:.9rem;color:var(--text-sub)">送信中...</div>
-</div>
+<div class="submitting hidden" id="submitting"><div class="spinner"></div><p>送信しています…</p></div>
 
 <script>
-// === Config ===
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbx9Tiz9KOjUGGNHPC71irt-A19Ccb_g91E9JGcTCygKPAjKrFYzxQFImFVmgXXEfwhc/exec?token=jFSpbAoe8zs7sFoiJZfteJ_E7DTP5RT77ZiCW-fSI3M';
-const TOTAL_SLIDES = 10;
-let current = 0;
+const GAS_URL = 'YOUR_GAS_URL_HERE';
+const POST_TOKEN = 'YOUR_POST_TOKEN_HERE';
+
 const answers = {};
+let currentSlide = 'intro';
+let slideHistory = [];
+let shuffledOptions = {};
 
-// === Option data with emojis ===
-const q2opts = [
-  {emoji:'😊', text:'かなり解消された'},
-  {emoji:'🙂', text:'少し解消された'},
-  {emoji:'😐', text:'あまり変わらない'},
-  {emoji:'😟', text:'むしろ疑問が増えた'},
-  {emoji:'💡', text:'もともと疑問はなかった'}
-];
-const q3opts = [
-  {emoji:'😊', text:'かなり解消された'},
-  {emoji:'🙂', text:'少し解消された'},
-  {emoji:'😐', text:'あまり変わらない'},
-  {emoji:'😟', text:'むしろ疑問が増えた'},
-  {emoji:'💡', text:'もともと疑問はなかった'}
-];
-const q5opts = [
-  {emoji:'🙋', text:'参加する'},
-  {emoji:'🙅', text:'参加しない'},
-  {emoji:'🤔', text:'分からない'}
-];
-const q6newOpts = [
-  {emoji:'🤖', text:'丸投げ仕分け'},
-  {emoji:'👆', text:'スワイプ仕分け'},
-  {emoji:'📸', text:'レシートのカメラ読み取り'},
-  {emoji:'🔍', text:'税務調査リスクチェック'},
-  {emoji:'📄', text:'申告書類の自動作成'},
-  {emoji:'📱', text:'マイナンバーカードでアプリ内提出'},
-  {emoji:'💁', text:'チャットサポート'},
-  {emoji:'💬', text:'その他'}
-];
-const q7opts = [
-  {emoji:'🤩', text:'ぜひ紹介したい'},
-  {emoji:'😊', text:'機会があれば紹介する'},
-  {emoji:'😐', text:'あまり紹介しない'},
-  {emoji:'🙅', text:'紹介しない'}
-];
-const booths = [
-  {id:'A', emoji:'👨‍⚖️', label:'A：税理士 よくある質問コーナー'},
-  {id:'B', emoji:'💬', label:'B：個別相談'},
-  {id:'C', emoji:'🤝', label:'C：ユーザー交流会'}
-];
-
-// === Init ===
-function init() {
-  buildStars('stars1', 'q1');
-  buildRadio('opts2', q2opts, 'q2', 'nextBtn2');
-  buildRadio('opts3', q3opts, 'q3', 'nextBtn3');
-  buildBooths();
-  buildRadio('opts5', q5opts, 'q5', 'nextBtn5', handleQ5Select);
-  buildRadio('opts6new', q6newOpts, 'q6', 'nextBtn6new', handleQ6Select);
-  buildRadio('opts7', q7opts, 'q7', 'nextBtn7');
-  showSlide(0);
-  document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') validateEmail(); });
-}
-
-// === Star builder ===
-function buildStars(containerId, key, onRate) {
-  const wrap = document.getElementById(containerId);
-  wrap.innerHTML = '';
-  for (let i = 5; i >= 1; i--) {
-    const input = document.createElement('input');
-    input.type = 'radio'; input.name = key; input.value = i; input.id = key + '_' + i;
-    const label = document.createElement('label');
-    label.htmlFor = key + '_' + i; label.textContent = '★';
-    input.addEventListener('change', () => {
-      answers[key] = i;
-      if (onRate) onRate(i);
-      else {
-        const btn = document.getElementById('nextBtn1');
-        if (btn) btn.disabled = false;
-      }
-    });
-    wrap.appendChild(input);
-    wrap.appendChild(label);
+/* ── Utility ──────────────────────────────────────── */
+const SPARKLE_ICONS=['✦','✧','❋','✨','·'];
+function emitSparkles(el,count=5){
+  const rect=el.getBoundingClientRect();
+  const cx=rect.left+rect.width*0.12, cy=rect.top+rect.height/2;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('span');
+    p.className='micro-particle';
+    p.textContent=SPARKLE_ICONS[Math.floor(Math.random()*SPARKLE_ICONS.length)];
+    const dx=(Math.random()-.5)*70, dy=-(25+Math.random()*35);
+    p.style.cssText=`left:${cx+Math.random()*24-12}px;top:${cy+Math.random()*12-6}px;--dx:${dx}px;--dy:${dy}px;animation-delay:${i*0.05}s;color:var(--brand)`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),900);
   }
 }
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function randomizeKeepLast(opts,n){return[...shuffle(opts.slice(0,opts.length-n)),...opts.slice(opts.length-n)]}
+function randomizeKeepLast2(opts){return randomizeKeepLast(opts,2)}
+function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-// === Radio builder ===
-function buildRadio(containerId, opts, key, nextBtnId, onSelect) {
-  const wrap = document.getElementById(containerId);
-  opts.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn'; btn.type = 'button';
-    btn.innerHTML = `<span class="opt-emoji">${opt.emoji}</span><span>${opt.text}</span><span class="opt-check"></span>`;
-    btn.addEventListener('click', () => {
-      answers[key] = opt.text;
-      wrap.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      document.getElementById(nextBtnId).disabled = false;
-      if (onSelect) onSelect(opt.text);
-    });
-    wrap.appendChild(btn);
+/* ── Questions Data ───────────────────────────────── */
+const Q = {
+  q2:{type:'sa',autoAdvance:false,
+    text:'現在の働き方を教えてください。',
+    options:[
+      {v:'1',label:'【事業所得】専業フリーランス・個人事業主'},
+      {v:'2',label:'【事業所得＋給与所得】副業フリーランス・個人事業主'},
+      {v:'3',label:'【給与所得＋雑所得】副業フリーランス・個人事業主'},
+      {v:'4',label:'【給与所得】正社員・アルバイト・パート'},
+      {v:'5',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'fixed',required:true},
+  q3:{type:'sa',autoAdvance:false,
+    text:'あなたの個人事業の職種を教えてください。\n※副業の方は副業の職種を教えてください。\n※複数に該当する場合は、最も活動の多い職種を選択してください。',
+    options:[
+      {v:'1',label:'📦 倉庫作業員'},{v:'2',label:'🚗 ドライバー'},{v:'3',label:'🛒 EC販売・せどり'},
+      {v:'4',label:'🔨 一人親方'},{v:'5',label:'📱 インフルエンサー・ライバー'},
+      {v:'6',label:'🎨 クリエイター（イラストレーター、動画制作など）'},
+      {v:'7',label:'✂️ 美容師・理容師・ネイリスト'},{v:'8',label:'💆 セラピスト・エステティシャン'},
+      {v:'9',label:'🗂️ 事務・サービス系'},{v:'10',label:'🍳 飲食系（調理人・オーナーなど）'},
+      {v:'11',label:'🤝 セールス・訪問販売'},{v:'12',label:'📊 コンサルタント'},
+      {v:'13',label:'📚 教師・講師'},{v:'14',label:'💻 エンジニア'},
+      {v:'15',label:'🖥️ IT系（デザイナー・ディレクター・マーケターなど）'},
+      {v:'16',label:'🏥 医療・福祉系'},{v:'17',label:'🎤 エンタメ・音楽・芸能・アスリート系'},
+      {v:'18',label:'🏠 不動産・投資・金融系'},{v:'19',label:'⚖️ 専門職・士業系'},
+      {v:'20',label:'✏️ その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q4:{type:'sa',autoAdvance:false,
+    text:'🏢 今年の確定申告に、不動産所得は含まれていますか？',
+    options:[{v:'1',label:'はい'},{v:'2',label:'いいえ'}],order:'fixed',required:true},
+  q5:{type:'sa',autoAdvance:false,
+    text:'タックスナップを使って確定申告書の作成はしましたか？',
+    options:[
+      {v:'1',label:'タックスナップを使って【作成済み】'},
+      {v:'2',label:'これからタックスナップで【作成予定】'},
+      {v:'3',label:'タックスナップでは【作成してない】'}
+    ],order:'fixed',required:true},
+  q6:{type:'sa',autoAdvance:false,
+    text:'これまでに確定申告を行った回数を教えてください。',
+    options:[
+      {v:'1',label:'0回（まだしたことがない）'},{v:'2',label:'1回'},
+      {v:'3',label:'2回'},{v:'4',label:'3〜5回'},
+      {v:'5',label:'6〜10回'},{v:'6',label:'それ以上'},{v:'7',label:'わからない'}
+    ],order:'fixed',required:true},
+  q7:{type:'nps',
+    text:'あなたはタックスナップを友人や知人にどの程度オススメしたいと思いますか？',
+    min:1,max:10,leftLabel:'👎全くオススメできない',rightLabel:'とてもオススメしたい🔥',required:true},
+  q8:{type:'fa',text:'この点数をつけた理由を是非教えてくださいm(_)m',required:false},
+  q9:{type:'sa',autoAdvance:false,
+    text:'もし明日からタックスナップが使えなくなったら、あなたはどのように感じますか？',
+    options:[
+      {v:'1',label:'😱 非常に困る'},{v:'2',label:'😟 少し困る'},
+      {v:'3',label:'🤔 どちらとも言えない'},{v:'4',label:'😐 あまり困らない'},{v:'5',label:'😊 全く困らない'}
+    ],order:'fixed',required:true},
+  q10:{type:'fa',text:'選んだ理由を是非教えてくださいm(_)m',required:false},
+  q11:{type:'sa',autoAdvance:false,
+    text:'タックスナップのご利用状況を教えてください。\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+    options:[
+      {v:'1',label:'ダウンロードしたが、無料トライアルには登録していない'},
+      {v:'2',label:'無料トライアルに登録したが、有料課金せずキャンセルした'},
+      {v:'3',label:'タックスナップに有料課金した'},
+      {v:'4',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'fixed',required:true},
+  q12:{type:'sa',autoAdvance:false,
+    text:'タックスナップをダウンロードしたのに、無料トライアルに登録しなかった最も大きな理由は何ですか？\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+    options:[
+      {v:'1',label:'とりあえずダウンロードしただけ・他手法で申告することを決めていた'},
+      {v:'2',label:'使い方がわからなかった・操作で行き詰まった'},
+      {v:'3',label:'使ってみたが、良さを感じなかった'},
+      {v:'4',label:'自分の利用環境や申告内容に合わなかった'},
+      {v:'5',label:'トライアル登録の手続きが面倒・不安だった'},
+      {v:'6',label:'料金が合わなかった'},
+      {v:'7',label:'サービスが信頼できなかった・不安要素があった'},
+      {v:'8',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q13:{type:'sa',autoAdvance:false,
+    text:'「とりあえずダウンロードしただけ・他の手法で進めていた」とのことですが、最もあてはまるものを1つ選んでください。',
+    options:[
+      {v:'a',label:'freeeで進めていた'},{v:'b',label:'マネーフォワードで進めていた'},
+      {v:'c',label:'弥生で進めていた'},{v:'d',label:'その他の会計ソフトで進めていた'},
+      {v:'e',label:'税理士に依頼していた'},{v:'f',label:'紙やノートで進めていた'},
+      {v:'g',label:'スプレッドシート/Excelで進めていた'},{v:'h',label:'友人・家族に依頼していた'},
+      {v:'i',label:'手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
+      {v:'j',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last2',required:true},
+  q14:{type:'ma',
+    text:'使い方がわからなかった・行き詰まった場面として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'まず何からしていいかわからなかった'},
+      {v:'b',label:'操作方法や進め方がわからなかった'},
+      {v:'c',label:'銀行口座やカードの連携がうまくいかなかった'},
+      {v:'d',label:'他社ソフトからの乗り換え・データ移行が大変だった'},
+      {v:'e',label:'アプリが重い・エラーやクラッシュが起きた'},
+      {v:'f',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q15:{type:'ma',
+    text:'使ってみて良さを感じなかった理由として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true},
+      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true},
+      {v:'c',label:'自分が期待していた機能がなかった',freeText:true},
+      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true},
+      {v:'e',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q16:{type:'ma',
+    text:'「自分の利用環境や申告内容に合わなかった」点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true},
+      {v:'b',label:'自分の規模なら、ここまでの機能は必要ないと思った'},
+      {v:'c',label:'PC・タブレットで使いたかった'},
+      {v:'d',label:'自分の銀行口座・カードが連携に対応していなかった'},
+      {v:'e',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q17:{type:'ma',
+    text:'トライアル登録の手続きで面倒・不安に感じた点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'課金画面がいきなり出てきて怖いと感じた'},
+      {v:'b',label:'クレジットカードを持っておらず、申し込めなかった'},
+      {v:'c',label:'トライアル開始までのステップが面倒だった'},
+      {v:'d',label:'カード情報の入力が面倒だった'},
+      {v:'e',label:'後々解約するのが面倒そうだった'},
+      {v:'f',label:'解約を忘れて課金されるのが怖かった'},
+      {v:'g',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q18:{type:'ma',
+    text:'料金や費用面について、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'他社と比較して高いと感じた'},
+      {v:'b',label:'そもそも確定申告にこの金額をかけたくない'},
+      {v:'c',label:'他の会計ソフトの契約が残っていて、2重に支払ってまで使おうとは思わなかった'},
+      {v:'d',label:'そもそも有料サービスだと思っていなかった'},
+      {v:'e',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q19:{type:'ma',
+    text:'サービスが信頼できなかった・不安を感じた点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'クレジットカードや銀行口座などの金融情報の入力・連携が不安だった'},
+      {v:'b',label:'収入・売上などの金銭情報を預けるのが不安だった'},
+      {v:'c',label:'本名・住所など個人を特定できる情報の入力が不安だった'},
+      {v:'d',label:'マイナンバーの入力が不安だった'},
+      {v:'e',label:'申告の精度が不安で、ミスが怖かった'},
+      {v:'f',label:'困った時のサポートが不十分だと思った'},
+      {v:'g',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q20:{type:'sa',autoAdvance:false,
+    text:'タックスナップの無料トライアルをキャンセルした最も大きな理由は何ですか？\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+    options:[
+      {v:'1',label:'とりあえず試してみただけ・他手法で申告することを決めていた'},
+      {v:'2',label:'使い方がわからなかった・操作で行き詰まった'},
+      {v:'3',label:'使えたけど、期待したほどではなかった'},
+      {v:'4',label:'自分の利用環境や申告内容に合わなかった'},
+      {v:'5',label:'料金が合わなかった'},
+      {v:'6',label:'サービスが信頼できなかった・不安要素があった'},
+      {v:'7',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q21:{type:'sa',autoAdvance:false,
+    text:'「とりあえず試しただけ・他の手法で進めていた」とのことですが、最もあてはまるものを1つ選んでください。',
+    options:[
+      {v:'a',label:'freeeで進めていた'},{v:'b',label:'マネーフォワードで進めていた'},
+      {v:'c',label:'弥生で進めていた'},{v:'d',label:'その他の会計ソフトで進めていた'},
+      {v:'e',label:'税理士に依頼していた'},{v:'f',label:'紙やノートで進めていた'},
+      {v:'g',label:'スプレッドシート/Excelで進めていた'},{v:'h',label:'友人・家族に依頼していた'},
+      {v:'i',label:'手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
+      {v:'j',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last2',required:true},
+  q22:{type:'ma',
+    text:'使い方がわからなかった・行き詰まった場面として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'最初に何をすればいいかわからなかった'},
+      {v:'b',label:'操作方法や進め方がわからなかった'},
+      {v:'c',label:'銀行口座やカードの連携がうまくいかなかった'},
+      {v:'d',label:'他社ソフトからの乗り換え・データ移行が大変だった'},
+      {v:'e',label:'途中でエラーや不具合が出て進めなくなった'},
+      {v:'f',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q23:{type:'ma',
+    text:'使ってみて良さを感じなかった理由として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true},
+      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true},
+      {v:'c',label:'自分が期待していた機能がなかった',freeText:true},
+      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true},
+      {v:'e',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q24:{type:'ma',
+    text:'「自分の利用環境や申告内容に合わなかった」点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true},
+      {v:'b',label:'自分の規模なら、ここまでの機能は必要ないと思った'},
+      {v:'c',label:'PC・タブレットで使いたかった'},
+      {v:'d',label:'自分の銀行口座・カードが連携に対応していなかった'},
+      {v:'e',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q25:{type:'ma',
+    text:'料金や費用面について、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'他社と比較して高いと感じた'},
+      {v:'b',label:'そもそも確定申告にこの金額をかけたくない'},
+      {v:'c',label:'他の会計ソフトの契約が残っていて、2重に支払ってまで使おうとは思わなかった'},
+      {v:'d',label:'提出するまで無料で使えると思っていた'},
+      {v:'e',label:'サブスク型の支払い形式が不安'},
+      {v:'f',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q26:{type:'ma',
+    text:'サブスク型の支払いで不安に感じた点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'e1',label:'解約したいときに、ちゃんと解約されるか不安'},
+      {v:'e2',label:'解約し忘れそうで不安'},
+      {v:'e3',label:'次いつ課金されるかわからなくて不安'},
+      {v:'e4',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q27:{type:'ma',
+    text:'サービスが信頼できなかった・不安を感じた点として、あてはまるものをすべてお答えください。',
+    options:[
+      {v:'a',label:'クレジットカードや銀行口座などの金融情報の入力・連携が不安だった'},
+      {v:'b',label:'収入・売上などの金銭情報を預けるのが不安だった'},
+      {v:'c',label:'本名・住所など個人を特定できる情報の入力が不安だった'},
+      {v:'d',label:'マイナンバーの入力が不安だった'},
+      {v:'e',label:'申告の精度が不安で、ミスが怖かった'},
+      {v:'f',label:'アプリでの提出がちゃんとできるか不安だった'},
+      {v:'g',label:'困った時のサポートが不十分だと思った'},
+      {v:'h',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q28:{type:'ma',
+    text:'確定申告や帳簿付けで経験したことがある手段を教えてください。',
+    options:[
+      {v:'1',label:'freee'},{v:'2',label:'マネーフォワード'},{v:'3',label:'弥生'},
+      {v:'4',label:'finfin'},{v:'5',label:'タックスナップ'},
+      {v:'6',label:'Excel / Spreadsheet'},{v:'7',label:'紙やノート'},
+      {v:'8',label:'税理士に依頼'},{v:'9',label:'団体やコミュニティからサポート'},
+      {v:'10',label:'家族や友人に依頼'},{v:'11',label:'税務署に相談'},
+      {v:'12',label:'今回が初めてなので上記の選択肢にない',exclusive:true},
+      {v:'13',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last2',required:true},
+  q29:{type:'sa_dynamic',autoAdvance:false,
+    text:'タックスナップに切り替える前は、主にどのように確定申告を行っていましたか？',required:true},
+  q30:{type:'sa',autoAdvance:false,
+    text:'2025年度分（2026年2,3月提出）の確定申告は、主にどのように行いましたか？',
+    options:[
+      {v:'1',label:'freee'},{v:'2',label:'マネーフォワード'},{v:'3',label:'弥生'},
+      {v:'4',label:'finfin'},{v:'5',label:'Excel / Spreadsheet'},
+      {v:'6',label:'紙やノート'},{v:'7',label:'税理士に依頼'},
+      {v:'8',label:'団体やコミュニティからサポート'},{v:'9',label:'家族や友人に依頼'},
+      {v:'10',label:'税務署に相談'},{v:'11',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last1',required:true},
+  q31:{type:'sa',autoAdvance:false,
+    text:'今、タックスナップを使う最も大きな理由は何ですか？',
+    options:[
+      {v:'1',label:'😄 使うのが楽しい'},{v:'2',label:'⏰ 時間や手間の効率化ができる'},
+      {v:'3',label:'📖 知識なしでも使える'},{v:'4',label:'🤖 仕分け/仕訳を丸投げできる'},
+      {v:'5',label:'🛡️ 税務調査のリスクが抑えられる'},{v:'6',label:'💰 返金保証がある'},
+      {v:'7',label:'👨‍⚖️ 税理士監修のアプリ'},{v:'8',label:'💹 節税できる'},
+      {v:'9',label:'💴 料金的に安い'},{v:'10',label:'👀 アプリが見やすい・分かりやすい'},
+      {v:'11',label:'📱 スマホアプリで完結できる'},{v:'12',label:'📞 サポートが良い'},
+      {v:'13',label:'特にない/使っていない'},
+      {v:'14',label:'✏️ その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last2',required:true},
+  q32:{type:'ma',
+    text:'タックスナップで改善してほしいことは何ですか？',
+    options:[
+      {v:'1',label:'操作の分かりやすさ'},{v:'2',label:'確定申告の精度や信頼性'},
+      {v:'3',label:'サポート体制'},{v:'4',label:'アプリの動作速度・安定性'},
+      {v:'5',label:'料金体系・コスト面'},{v:'6',label:'機能追加や連携サービスの充実'},
+      {v:'7',label:'特にない',exclusive:true},
+      {v:'8',label:'その他',freeText:true,freeTextRequired:true}
+    ],order:'randomize_last2',required:true},
+  q33:{type:'matrix',
+    text:'タックスナップに以下のような機能が追加されたら、どの程度使いたいと思いますか？それぞれお答えください。',
+    rows:[
+      {key:'q33_1',label:'🏦 【信用が貯まる】仕訳や確定申告をすることで信用スコアが上がり、融資枠や金利優遇が自動でついてくる！'},
+      {key:'q33_2',label:'🎯 【ポイントが貯まる】日々の仕訳・経費入力でポイントが貯まり、利用料や提携サービスに使える！'},
+      {key:'q33_3',label:'🤝 【対面サポート】初期設定から使い方まで、対面でも電話でもサポートが受けられる！'},
+      {key:'q33_4',label:'💬 【LINEで完結】LINEで会話やタップするだけ！相談もできる。アプリを開かず申告が9割終わる！'}
+    ],
+    cols:['非常に使いたい','やや使いたい','どちらともいえない','あまり使いたくない','全く使いたくない'],
+    required:true},
+  q34:{type:'matrix',
+    html:'タックスナップに、<span style="text-decoration:underline wavy var(--brand);text-underline-offset:4px">確定申告以外でも</span>使える以下の機能が追加されたら、どの程度使いたいと思いますか？それぞれお答えください',
+    rows:[
+      {key:'q34_1',label:'🔧 【職種に特化】自分の職種に合った業務管理（例：現場日報・在庫管理）がアプリででき、そのまま帳簿が完成する！'},
+      {key:'q34_2',label:'💡 【手取り最大化】「あなたの場合、年○万円おトクに」専属AIが節約・節税アドバイスをくれて、手取りが増える！'},
+      {key:'q34_3',label:'🤝 【仲間とつながる】限定コミュニティで、同業の仲間と気軽に相談し合ったり、仕事を紹介し合える！'},
+      {key:'q34_4',label:'💼 【仕事が見つかる】自分のスキルや実績にマッチした案件がアプリに届き、売上アップにつながる！'}
+    ],
+    cols:['非常に使いたい','やや使いたい','どちらともいえない','あまり使いたくない','全く使いたくない'],
+    required:true},
+  q35:{type:'multi_step',
+    text:'個人事業主として活動する中で、課題や苦労に感じていることはどれですか？',
+    steps:[
+      {type:'ma',
+        text:'個人事業主として活動する中で、課題や苦労に感じていることはどれですか？',
+        options:[
+          {v:'1',label:'📉 収入の不安定・集客・仕事の獲得'},
+          {v:'2',label:'💸 資金繰り・キャッシュフロー'},
+          {v:'3',label:'📋 確定申告'},
+          {v:'4',label:'📂 日々の事務・管理業務（契約書・請求書・顧客管理など）'},
+          {v:'5',label:'🏦 社会的信用の低さ（ローン・契約など）'},
+          {v:'6',label:'😔 孤独感・相談相手がいない'},
+          {v:'7',label:'🔮 将来への不安（年金・保険・老後など）'},
+          {v:'8',label:'特にない',exclusive:true},
+          {v:'9',label:'✏️ その他',freeText:true,freeTextRequired:true}
+        ],order:'randomize_last2',required:true},
+      {type:'sa_from_prev',text:'その中で、最も課題に感じていることを1つ教えてください。',required:true},
+      {type:'fa',text:'具体的に何が苦労か教えてください。',required:true}
+    ]},
+  q36:{type:'sa',autoAdvance:false,
+    text:'もしよろしければタックスナップについてアプリストア（App Store / Google Play）から評価していただけると嬉しいです！',
+    options:[{v:'1',label:'OK！'},{v:'2',label:'今はしない'}],order:'fixed',required:false},
+  q37:{type:'sa',autoAdvance:false,
+    text:'サービスの改善のために、今後タックスナップの社員がお話をお聞きさせていただくことにご協力いただけますか？',
+    options:[
+      {v:'1',label:'OK！\n※ご協力いただける方にはタックスナップからご連絡のメールをさせていただくかもしれません。'},
+      {v:'2',label:'今はちょっと…'}
+    ],order:'fixed',required:false}
+};
+
+/* ── Branching ────────────────────────────────────── */
+function getNextSlide(cur){
+  if(cur==='intro') return 'q2';
+  if(cur==='q2') return ['1','2','3'].includes(answers.q2)?'q3':'q4';
+  if(cur==='q3') return 'q4';
+  if(cur==='q4') return 'q5';
+  if(cur==='q5') return 'q6';
+  if(cur==='q6') return 'q7';
+  if(cur==='q7') return 'q9'; /* Q8 is inline with Q7 */
+  if(cur==='q9'){ /* Q10 is inline with Q9 */
+    if(['1','2'].includes(answers.q2)||answers.q4==='1') return 'q11';
+    return 'q28';
+  }
+  if(cur==='q11'){
+    if(answers.q11==='1') return 'q12';
+    if(answers.q11==='2') return 'q20';
+    return 'q28';
+  }
+  if(cur==='q12'){
+    return{1:'q13',2:'q14',3:'q15',4:'q16',5:'q17',6:'q18',7:'q19',8:'q28'}[answers.q12]||'q28';
+  }
+  if(['q13','q14','q15','q16','q17','q18','q19'].includes(cur)) return 'q28';
+  if(cur==='q20'){
+    return{1:'q21',2:'q22',3:'q23',4:'q24',5:'q25',6:'q27',7:'q28'}[answers.q20]||'q28';
+  }
+  if(['q21','q22','q23','q24'].includes(cur)) return 'q28';
+  if(cur==='q25'){
+    const vals=(answers.q25||'').split(',');
+    if(vals.includes('e')) return 'q26';
+    return 'q28';
+  }
+  if(cur==='q26') return 'q28';
+  if(cur==='q27') return 'q28';
+  if(cur==='q28'){
+    // Q28でタックスナップのみ or 初めてのみ → Q29(切り替え前の手段)をスキップ
+    const v28=(answers.q28||'').split(',').filter(Boolean);
+    const onlyTaxnap=v28.length===1&&(v28[0]==='5'||v28[0]==='12');
+    if(onlyTaxnap)return 'q31';
+    return 'q29';
+  }
+  if(cur==='q29') return answers.q29==='0'?'q30':'q31';
+  if(cur==='q30') return 'q31';
+  if(cur==='q31') return 'q32';
+  if(cur==='q32') return 'q33';
+  if(cur==='q33') return 'q34';
+  if(cur==='q34') return ['1','2'].includes(answers.q2)?'q35':'q36';
+  if(cur==='q35') return 'q36';
+  if(cur==='q36') return 'q37';
+  if(cur==='q37') return 'complete';
+  return 'complete';
+}
+
+function countTotalSlides(){
+  let c=1,s='intro';const v=new Set();
+  while(s!=='complete'&&c<50){v.add(s);s=getNextSlide(s);if(s==='complete')break;if(v.has(s))break;c++}
+  return c;
+}
+function getSlideIndex(){return slideHistory.length}
+/* visible Q number = position among answered questions (not internal qid) */
+function getVisibleQNum(qid){
+  let n=0;
+  for(const sid of slideHistory){if(sid!=='intro')n++}
+  if(qid!=='intro')n++;
+  return n;
+}
+function updateProgress(){
+  const t=countTotalSlides(),c=getSlideIndex(),p=Math.min(Math.round(c/t*100),100);
+  document.getElementById('progressFill').style.width=p+'%';
+  // move mascot along progress bar
+  const mascot=document.getElementById('progressMascot');
+  if(mascot){
+    mascot.style.left=`calc(${p}% - 18px)`;
+    mascot.classList.remove('walk');
+    void mascot.offsetHeight;
+    mascot.classList.add('walk');
+    setTimeout(()=>mascot.classList.remove('walk'),700);
+  }
+}
+function qHeader(qid,type,optional){
+  const n=getVisibleQNum(qid);
+  return `<div class="q-number">Q${n}${optional?' <span class="optional-badge">任意</span>':''}</div>`;
+}
+function qHint(type){
+  let hint='';
+  if(type==='sa')hint='ひとつだけ選んでください';
+  else if(type==='ma')hint='あてはまるものをすべて選んでください';
+  else if(type==='nps')hint='1〜10から選んでください';
+  else if(type==='matrix')hint='それぞれひとつずつ選んでください';
+  return hint?`<div class="q-hint">${hint}</div>`:'';
+}
+
+/* ── Ordered options ──────────────────────────────── */
+function getOrderedOptions(qid){
+  const q=Q[qid];if(!q||!q.options)return[];
+  if(shuffledOptions[qid])return shuffledOptions[qid];
+  let opts=[...q.options];
+  if(q.order==='randomize_last1') opts=randomizeKeepLast(opts,1);
+  else if(q.order==='randomize_last2') opts=randomizeKeepLast(opts,2);
+  shuffledOptions[qid]=opts;return opts;
+}
+
+/* ── Render functions ─────────────────────────────── */
+function renderIntro(){
+  return `<div class="intro-card">
+    <div class="intro-hero">
+      <span class="deco deco-1">📝</span>
+      <span class="deco deco-2">✨</span>
+      <span class="deco deco-3">💬</span>
+      <canvas id="snappyIntro" width="224" height="224"></canvas>
+      <div class="intro-speech" id="snappySpeech">
+        <p>あなたの声を聞かせてください！</p>
+      </div>
+    </div>
+    <div class="intro-body">
+      <div style="text-align:center;margin-bottom:16px">
+        <div class="intro-title">かんたん5分アンケート</div>
+        <div class="intro-sub">
+          いつもタックスナップをご利用いただきありがとうございます。<br>
+          今後のサービス改善のため、ご協力をお願いいたします。
+        </div>
+      </div>
+      <div class="intro-email-wrap">
+        <input type="email" class="email-input" id="emailInput"
+          placeholder="タックスナップ登録メールアドレス" autocomplete="email"
+          oninput="handleEmailTyping(this)" onfocus="handleEmailFocus()" onblur="handleEmailBlur()">
+        <span class="email-check" id="emailCheck">✅</span>
+        <div class="error-msg" id="emailError">有効なメールアドレスを入力してください</div>
+      </div>
+      <button class="btn-next" id="btnStart" onclick="handleIntroSubmit()">アンケートに答える 🚀</button>
+      <p style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px">回答は匿名で処理されます</p>
+    </div>
+  </div>`;
+}
+
+function renderSA(qid){
+  const q=Q[qid],opts=getOrderedOptions(qid);
+  let h=`<div class="q-card">${qHeader(qid,'sa',false)}
+    <div class="q-text">${escHtml(q.text)}</div>${qHint('sa')}`;
+  opts.forEach(o=>{
+    const ftId=`ft_${qid}_${o.v}`;
+    h+=`<div class="sa-option" data-qid="${qid}" data-val="${o.v}" onclick="handleSAClick(this,${!!o.freeText},${!!o.freeTextRequired})">
+      <div class="radio"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
   });
-}
-
-// === Q6 handler ===
-function handleQ6Select(text) {
-  const followup = document.getElementById('followup6');
-  if (text === 'その他') {
-    followup.classList.add('show');
-  } else {
-    followup.classList.remove('show');
-    document.getElementById('q6other').value = '';
+  // Q9: inline Q10 reason (same pattern as NPS+Q8)
+  if(qid==='q9'){
+    h+=`<div class="nps-fa-wrap hidden-step" id="q9FAWrap">
+      <div class="q-text">選んだ理由を是非教えてくださいm(_)m <span class="optional-badge">任意</span></div>
+      <textarea class="fa-textarea" id="fa_q10" placeholder="ご自由にお書きください"></textarea>
+    </div>`;
   }
+  h+=`<button class="btn-next" id="btnSA_${qid}" onclick="handleSASubmit('${qid}')">次へ</button>`;
+  h+=backBtn();
+  h+=`</div>`;return h;
 }
 
-// === Q5 handler ===
-function handleQ5Select(text) {
-  const followup = document.getElementById('followup5');
-  if (text === '参加する' || text === '参加しない') {
-    followup.classList.add('show');
-  } else {
-    followup.classList.remove('show');
-    document.getElementById('reason5').value = '';
-    document.getElementById('reason5Error').classList.remove('show');
-  }
-}
-
-// === Booth builder ===
-function buildBooths() {
-  const checkWrap = document.getElementById('boothChecks');
-  const rateWrap = document.getElementById('boothRatings');
-
-  booths.forEach(b => {
-    const lbl = document.createElement('label');
-    lbl.className = 'booth-check';
-    lbl.innerHTML = `<input type="checkbox" value="${b.id}"><div class="checkmark"></div><span class="booth-emoji">${b.emoji}</span><span>${b.label}</span>`;
-    lbl.addEventListener('click', e => {
-      e.preventDefault();
-      const cb = lbl.querySelector('input');
-      cb.checked = !cb.checked;
-      lbl.classList.toggle('checked', cb.checked);
-      document.getElementById('booth_rate_' + b.id).classList.toggle('show', cb.checked);
-      if (!cb.checked) {
-        delete answers['q4_' + b.id];
-        delete answers['q4_' + b.id + '_reason'];
-        const stars = document.getElementById('booth_rate_' + b.id).querySelectorAll('input');
-        stars.forEach(s => s.checked = false);
-        const rw = document.getElementById('reason_wrap_' + b.id);
-        if (rw) rw.classList.remove('show');
-      }
-    });
-    checkWrap.appendChild(lbl);
-
-    const item = document.createElement('div');
-    item.className = 'booth-rating-item';
-    item.id = 'booth_rate_' + b.id;
-    item.innerHTML = `
-      <div class="booth-rating-label">${b.emoji} ${b.label}</div>
-      <div class="stars" id="stars_${b.id}"></div>
-      <div class="star-reason" id="reason_wrap_${b.id}">
-        <textarea class="text-input" id="reason_${b.id}" placeholder="評価の理由を教えてください" style="min-height:60px;margin-top:8px"></textarea>
-      </div>`;
-    rateWrap.appendChild(item);
-
-    setTimeout(() => {
-      buildStars('stars_' + b.id, 'q4_' + b.id, rating => {
-        answers['q4_' + b.id] = rating;
-        const reasonWrap = document.getElementById('reason_wrap_' + b.id);
-        if (rating < 3) reasonWrap.classList.add('show');
-        else { reasonWrap.classList.remove('show'); delete answers['q4_' + b.id + '_reason']; }
-      });
-    }, 0);
+function renderMA(qid){
+  const q=Q[qid],opts=getOrderedOptions(qid);
+  let h=`<div class="q-card">${qHeader(qid,'ma',false)}
+    <div class="q-text">${escHtml(q.text)}</div>${qHint('ma')}`;
+  opts.forEach(o=>{
+    const ftId=`ft_${qid}_${o.v}`;
+    h+=`<div class="ma-option" data-qid="${qid}" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
+      <div class="checkbox"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
   });
+  h+=`<button class="btn-next" onclick="handleMASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
+  return h;
 }
 
-// === Navigation ===
-function showSlide(n) {
-  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-  const slide = document.getElementById('s' + n);
-  if (slide) slide.classList.add('active');
-  current = n;
-  updateProgress();
-  window.scrollTo(0, 0);
-}
-function goNext() { showSlide(current + 1); }
-function goBack() { showSlide(current - 1); }
-
-function updateProgress() {
-  const pct = Math.min(current / TOTAL_SLIDES * 100, 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = current <= TOTAL_SLIDES - 1
-    ? `${current} / ${TOTAL_SLIDES}` : '';
+function renderFA(qid){
+  const q=Q[qid],opt=!q.required;
+  return `<div class="q-card">${qHeader(qid,'fa',opt)}
+    <div class="q-text">${escHtml(q.text)}</div>
+    <textarea class="fa-textarea" id="fa_${qid}" placeholder="\u3054\u81EA\u7531\u306B\u304A\u66F8\u304D\u304F\u3060\u3055\u3044"></textarea>
+    <div class="error-msg" id="err_${qid}">\u56DE\u7B54\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044</div>
+    <button class="btn-next" onclick="handleFASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
 }
 
-// === Validations ===
-function validateEmail() {
-  const input = document.getElementById('email');
-  const val = input.value.trim();
-  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-    input.classList.add('input-error');
-    document.getElementById('emailError').classList.add('show');
-    input.focus();
+function renderNPS(qid){
+  const q=Q[qid];
+  let h=`<div class="q-card" id="npsCard">${qHeader(qid,'nps',false)}
+    <div class="q-text">${escHtml(q.text)}</div>${qHint('nps')}
+    <div class="nps-wrap">
+      <div class="nps-labels">
+        <div class="nps-label-item"><div class="nps-label-icon">😞</div><div class="nps-label-text">全くオススメ<br>できない</div></div>
+        <div class="nps-label-item"><div class="nps-label-icon">😍</div><div class="nps-label-text">とてもオススメ<br>したい</div></div>
+      </div>
+      <div class="nps-stars" id="npsStars">`;
+  for(let i=q.min;i<=q.max;i++) h+=`<div class="nps-star" data-val="${i}" onclick="handleNPSClick(this,'${qid}')">${i}</div>`;
+  h+=`</div></div><div class="error-msg" id="err_${qid}">評価を選択してください</div>
+    <div class="nps-fa-wrap hidden-step" id="npsFAWrap">
+      <div class="q-text">この点数をつけた理由を是非教えてくださいm(_)m <span class="optional-badge">任意</span></div>
+      <textarea class="fa-textarea" id="fa_q8" placeholder="ご自由にお書きください"></textarea>
+    </div>
+    <button class="btn-next" onclick="handleNPSSubmit('${qid}')" style="margin-top:20px">次へ</button>${backBtn()}</div>`;
+  return h;
+}
+
+function renderMatrix(qid){
+  const q=Q[qid];
+  const qText=q.html||escHtml(q.text);
+  const icons=['😍','🙂','🤔','😕','😣'];
+  const labels=['非常に\n使いたい','やや\n使いたい','どちらとも\nいえない','あまり使い\nたくない','全く使い\nたくない'];
+  let h=`<div class="q-card">${qHeader(qid,'matrix',false)}
+    <div class="q-text">${qText}</div>${qHint('matrix')}`;
+  q.rows.forEach(r=>{
+    h+=`<div class="matrix-card" data-key="${r.key}"><div class="concept">${escHtml(r.label)}</div><div class="likert-row">`;
+    icons.forEach((ico,ci)=>{h+=`<div class="likert-btn" data-key="${r.key}" data-val="${ci+1}" onclick="handleLikertClick(this)"><span class="likert-icon">${ico}</span><span class="likert-label">${labels[ci].replace('\n','<br>')}</span></div>`});
+    h+=`</div></div>`;
+  });
+  h+=`<div class="error-msg" id="err_${qid}">\u3059\u3079\u3066\u306E\u9805\u76EE\u306B\u304A\u7B54\u3048\u304F\u3060\u3055\u3044</div>
+    <button class="btn-next" onclick="handleMatrixSubmit('${qid}')">次へ</button>${backBtn()}</div>`;
+  return h;
+}
+
+function renderQ29(){
+  const q28v=(answers.q28||'').split(','),q28opts=getOrderedOptions('q28'),lm={};
+  q28opts.forEach(o=>{lm[o.v]=o.label});
+  let opts=[{v:'0',label:'タックスナップに切り替えていない'}];
+  q28v.forEach(v=>{if(v&&v!=='5'&&v!=='12'&&v!=='13'&&lm[v])opts.push({v,label:lm[v]})});
+  // add "その他" from q28 if selected
+  if(q28v.includes('13'))opts.push({v:'13',label:'その他',freeText:true,freeTextRequired:true});
+  opts.push({v:'other',label:'その他',freeText:true,freeTextRequired:true});
+  // deduplicate その他
+  const seen=new Set();opts=opts.filter(o=>{const k=o.v;if(seen.has(k))return false;seen.add(k);return true});
+
+  let h=`<div class="q-card">${qHeader('q29','sa',false)}
+    <div class="q-text">${escHtml(Q.q29.text)}</div>${qHint('sa')}`;
+  opts.forEach(o=>{
+    const ftId=`ft_q29_${o.v}`;
+    h+=`<div class="sa-option" data-qid="q29" data-val="${o.v}" onclick="handleSAClick(this,${!!o.freeText},false)">
+      <div class="radio"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+  });
+  h+=`<button class="btn-next" onclick="handleSASubmit('q29')">次へ</button>${backBtn()}</div>`;return h;
+}
+
+/* Q35 inline all-in-one */
+function renderQ35(){
+  const q=Q.q35,s0=q.steps[0],s1=q.steps[1],s2=q.steps[2];
+  const opts=shuffledOptions['q35_s0']||(()=>{let o=[...s0.options];o=randomizeKeepLast(o,2);shuffledOptions['q35_s0']=o;return o})();
+  let h=`<div class="q-card">${qHeader('q35','ma',false)}
+    <div class="q-text">${escHtml(s0.text)}</div>${qHint('ma')}`;
+  opts.forEach(o=>{
+    const ftId=`ft_q35s0_${o.v}`;
+    h+=`<div class="ma-option" data-qid="q35_s0" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
+      <div class="checkbox"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+  });
+  /* step 2: SA from selected (hidden initially) */
+  h+=`<div class="q35-step hidden-step" id="q35step2">
+    <div class="q-text">${escHtml(s1.text)}</div>
+    <div id="q35s1opts"></div></div>`;
+  /* step 3: FA (hidden initially) */
+  h+=`<div class="q35-step hidden-step" id="q35step3">
+    <div class="q-text">${escHtml(s2.text)}</div>
+    <textarea class="fa-textarea" id="fa_q35_s2" placeholder="ご自由にお書きください"></textarea>
+    <div class="error-msg" id="err_q35_s2">回答を入力してください</div></div>`;
+  h+=`<button class="btn-next" id="q35btn" onclick="handleQ35Submit()">次へ</button>${backBtn()}</div>`;
+  return h;
+}
+
+function renderCTA(qid){
+  const n=getVisibleQNum(qid);
+  if(qid==='q36'){
+    return `<div class="cta-card"><div class="q-number">Q${n}</div>
+      <div class="cta-text">もしよろしければタックスナップについてアプリストア（App Store / Google Play）から評価していただけると嬉しいです！</div>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <button class="cta-ok" data-qid="q36" data-val="1" onclick="handleCTASelect(this)">⭐ はい</button>
+        <button class="cta-ok cta-no" data-qid="q36" data-val="2" onclick="handleCTASelect(this)">いいえ</button>
+      </div>
+      <button class="btn-next" onclick="handleCTASubmit('q36')">次へ</button>${backBtn()}</div>`;
+  }
+  return `<div class="cta-card"><div class="q-number">Q${n}</div>
+    <div class="cta-text">サービス改善のため、タックスナップ社員がお話をお聞きすることにご協力いただけますか？</div>
+    <div class="cta-sub">※ご協力いただける方にはメールでご連絡させていただく場合があります</div>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button class="cta-ok" data-qid="q37" data-val="1" onclick="handleCTASelect(this)">🙋 はい</button>
+      <button class="cta-ok cta-no" data-qid="q37" data-val="2" onclick="handleCTASelect(this)">いいえ</button>
+    </div>
+    <button class="btn-next" onclick="handleCTASubmit('q37')">次へ</button>${backBtn()}</div>`;
+}
+
+function renderComplete(){
+  return `<div class="complete-card">
+    <canvas class="rive-complete" id="riveComplete"></canvas>
+    <div class="done-text">ご回答ありがとうございます！</div>
+    <div class="done-sub">アンケートを送信しました。</div></div>`;
+}
+
+/* ── Slide transition ─────────────────────────────── */
+function showSlide(id){
+  const area=document.getElementById('slideArea'),old=area.querySelector('.slide.active');
+  let html='';
+  if(id==='intro') html=renderIntro();
+  else if(id==='complete') html=renderComplete();
+  else if(id==='q29') html=renderQ29();
+  else if(id==='q35'){q35phase=0;html=renderQ35()}
+  else if(id==='q36'||id==='q37') html=renderCTA(id);
+  else{
+    const q=Q[id];if(!q)return;
+    if(q.type==='sa'||q.type==='sa_dynamic') html=renderSA(id);
+    else if(q.type==='ma') html=renderMA(id);
+    else if(q.type==='fa') html=renderFA(id);
+    else if(q.type==='nps') html=renderNPS(id);
+    else if(q.type==='matrix') html=renderMatrix(id);
+    else if(q.type==='multi_step') html=renderQ35();
+  }
+  const ns=document.createElement('div');ns.className='slide';ns.innerHTML=html;area.appendChild(ns);
+  ns.offsetHeight;
+  if(old){old.classList.remove('active');old.classList.add('exit-left');setTimeout(()=>old.remove(),400)}
+  setTimeout(()=>ns.classList.add('active'),50);
+  currentSlide=id;updateProgress();
+  if(id==='intro'){initRive('snappyIntro');setTimeout(()=>{const sp=document.getElementById('snappySpeech');if(sp)sp.classList.add('show')},500)}
+  if(id==='complete')initRive('riveComplete');
+  window.scrollTo({top:0,behavior:'smooth'});
+  // restore previous answers on this slide
+  setTimeout(()=>restoreAnswers(id),60);
+}
+
+function restoreAnswers(id){
+  // CTA restore
+  if(id==='q36'||id==='q37'){
+    const val=answers[id];if(!val)return;
+    const btn=document.querySelector(`.cta-ok[data-qid="${id}"][data-val="${val}"]`);
+    if(btn)btn.classList.add('cta-selected');
     return;
   }
-  answers.email = val;
-  input.classList.remove('input-error');
-  document.getElementById('emailError').classList.remove('show');
-  goNext();
-}
-
-function validateQ4() {
-  let valid = true;
-  const errEl = document.getElementById('boothError');
-  // Check all selected booths have star ratings
-  let hasSelected = false;
-  booths.forEach(b => {
-    const checked = document.querySelector('#boothChecks .booth-check.checked input[value="' + b.id + '"]');
-    if (checked) {
-      hasSelected = true;
-      if (!answers['q4_' + b.id]) {
-        valid = false;
-      }
-      if (answers['q4_' + b.id] && answers['q4_' + b.id] < 3) {
-        const el = document.getElementById('reason_' + b.id);
-        if (!el.value.trim()) {
-          el.classList.add('input-error');
-          valid = false;
-        } else {
-          el.classList.remove('input-error');
-          answers['q4_' + b.id + '_reason'] = el.value.trim();
-        }
-      }
-    }
-  });
-  if (!valid) {
-    errEl.textContent = hasSelected && !valid ? '満足度を選択してください' : '低評価の理由を入力してください';
-    errEl.classList.add('show'); return;
+  if(id==='intro'){
+    const inp=document.getElementById('emailInput');
+    if(inp&&answers.email)inp.value=answers.email;
+    return;
   }
-  errEl.classList.remove('show');
-  goNext();
-}
+  const q=Q[id];if(!q)return;
+  const val=answers[id];if(!val&&val!=='')return;
 
-function validateQ5() {
-  const text = answers.q5;
-  if (text === '参加する' || text === '参加しない') {
-    const el = document.getElementById('reason5');
-    if (!el.value.trim()) {
-      el.classList.add('input-error');
-      document.getElementById('reason5Error').classList.add('show');
-      el.focus();
-      return;
+  if(q.type==='sa'||q.type==='sa_dynamic'||id==='q29'){
+    if(!val)return;
+    const opt=document.querySelector(`[data-qid="${id}"][data-val="${val}"]`);
+    if(opt){opt.classList.add('selected');
+      const ft=opt.querySelector('.inline-text'),ftVal=answers[id+'_text'];
+      if(ft&&ftVal){ft.classList.remove('hidden');ft.value=ftVal}
     }
-    el.classList.remove('input-error');
-    document.getElementById('reason5Error').classList.remove('show');
-    answers.q5_reason = el.value.trim();
+    // Q9: restore inline Q10
+    if(id==='q9'){const fa=document.getElementById('q9FAWrap');if(fa)fa.classList.remove('hidden-step');
+      const ta=document.getElementById('fa_q10');if(ta&&answers.q10)ta.value=answers.q10}
   }
-  goNext();
+  else if(q.type==='ma'){
+    const vals=(val||'').split(',');
+    vals.forEach(v=>{
+      const opt=document.querySelector(`[data-qid="${id}"][data-val="${v}"]`);
+      if(opt){opt.classList.add('selected');
+        const ft=opt.querySelector('.inline-text');
+        if(ft){ft.classList.remove('hidden');
+          try{const texts=JSON.parse(answers[id+'_text']||'{}');if(texts[v])ft.value=texts[v]}catch(e){}}
+      }
+    });
+  }
+  else if(q.type==='nps'){
+    if(!val)return;
+    const star=document.querySelector(`.nps-star[data-val="${val}"]`);
+    if(star){star.classList.add('selected');star.style.animation='none'}
+    const fa=document.getElementById('npsFAWrap');if(fa)fa.classList.remove('hidden-step');
+    const ta=document.getElementById('fa_q8');if(ta&&answers.q8)ta.value=answers.q8;
+  }
+  else if(q.type==='fa'){
+    const ta=document.getElementById('fa_'+id);if(ta&&val)ta.value=val;
+  }
+  else if(q.type==='matrix'){
+    q.rows.forEach(r=>{
+      const v=answers[r.key];if(!v)return;
+      const btn=document.querySelector(`.likert-btn[data-key="${r.key}"][data-val="${v}"]`);
+      if(btn){btn.classList.add('selected');
+        const card=btn.closest('.matrix-card');if(card)card.classList.add('answered')}
+    });
+  }
+  else if(q.type==='multi_step'&&id==='q35'){
+    const maVal=answers.q35_ma;if(!maVal)return;
+    maVal.split(',').forEach(v=>{
+      const opt=document.querySelector(`[data-qid="q35_s0"][data-val="${v}"]`);
+      if(opt){opt.classList.add('selected');
+        const ft=opt.querySelector('.inline-text');
+        if(ft){ft.classList.remove('hidden');
+          try{const texts=JSON.parse(answers.q35_ma_text||'{}');if(texts[v])ft.value=texts[v]}catch(e){}}
+      }
+    });
+  }
 }
 
-// === Submit ===
-function submitSurvey() {
-  answers.q6_other = document.getElementById('q6other')?.value.trim() || '';
-  answers.q8 = document.getElementById('q8text')?.value.trim() || '';
-  answers.q9 = document.getElementById('q9text')?.value.trim() || '';
+function goToNext(){slideHistory.push(currentSlide);const n=getNextSlide(currentSlide);showSlide(n);if(n==='complete')submitSurvey()}
+function goBack(){
+  if(slideHistory.length===0)return;
+  const prev=slideHistory.pop();
+  showSlide(prev);
+}
+function backBtn(){return slideHistory.length>0?'<button class="btn-back" onclick="goBack()">← 戻る</button>':''}
 
-  booths.forEach(b => {
-    const el = document.getElementById('reason_' + b.id);
-    if (el && el.value.trim()) answers['q4_' + b.id + '_reason'] = el.value.trim();
+/* ── Event Handlers ───────────────────────────────── */
+const snappyMessages=['入力中...👀','いいね！📧','あとちょっと！✨'];
+let snappyMsgIdx=0;
+function handleEmailTyping(inp){
+  const v=inp.value.trim(),speech=document.getElementById('snappySpeech'),chk=document.getElementById('emailCheck');
+  const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  // show check mark on valid
+  if(chk){if(valid){chk.classList.add('show')}else{chk.classList.remove('show')}}
+  // snappy reacts
+  if(speech&&v.length>0){
+    if(valid){speech.innerHTML='準備OK！🎉';speech.classList.add('show')}
+    else if(v.includes('@')){speech.innerHTML='あとちょっと！✨';speech.classList.add('show')}
+    else if(v.length>3){speech.innerHTML='入力中... 👀';speech.classList.add('show')}
+  }
+  // remove error on typing
+  inp.classList.remove('error');
+  const err=document.getElementById('emailError');if(err)err.classList.remove('show');
+}
+function handleEmailFocus(){
+  const speech=document.getElementById('snappySpeech');
+  if(speech){speech.innerHTML='メアドを教えてね！';speech.classList.add('show')}
+}
+function handleEmailBlur(){
+  const inp=document.getElementById('emailInput');
+  if(!inp||!inp.value.trim()){const speech=document.getElementById('snappySpeech');if(speech){speech.innerHTML='よろしくね！'}}
+}
+function handleIntroSubmit(){
+  const inp=document.getElementById('emailInput'),err=document.getElementById('emailError'),v=inp.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){inp.classList.add('error');err.classList.add('show');
+    const speech=document.getElementById('snappySpeech');if(speech){speech.innerHTML='メアドを確認してね 🙏';speech.classList.add('show')}return}
+  inp.classList.remove('error');err.classList.remove('show');answers.email=v;goToNext();
+}
+
+function handleSAClick(el,hasFT,ftReq){
+  const qid=el.dataset.qid,container=el.parentElement;
+  container.querySelectorAll('.sa-option').forEach(o=>{o.classList.remove('selected');const f=o.querySelector('.inline-text');if(f)f.classList.add('hidden')});
+  el.classList.add('selected');
+  emitSparkles(el);
+  if(hasFT){const ft=el.querySelector('.inline-text');if(ft){ft.classList.remove('hidden');ft.focus()}}
+  // Q9: show inline Q10 reason
+  if(qid==='q9'){const fa=document.getElementById('q9FAWrap');if(fa&&fa.classList.contains('hidden-step')){fa.classList.remove('hidden-step');fa.scrollIntoView({behavior:'smooth',block:'nearest'})}}
+}
+
+function handleSASubmit(qid){
+  const container=document.querySelector(`[data-qid="${qid}"]`);if(!container)return;
+  const card=container.closest('.q-card')||container.parentElement;
+  const sel=card.querySelector('.sa-option.selected');
+  if(!sel){showInlineError(card,'\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044');return}
+  const val=sel.dataset.val,opt=getOptDef(qid,val);
+  const ft=sel.querySelector('.inline-text');
+  if(ft&&!ft.classList.contains('hidden')&&opt&&opt.freeTextRequired&&!ft.value.trim()){ft.style.borderColor='var(--error)';return}
+  answers[qid]=val;
+  if(ft&&ft.value.trim())answers[qid+'_text']=ft.value.trim();
+  // Q9: collect Q10 inline FA
+  if(qid==='q9'){const fa=document.getElementById('fa_q10');if(fa)answers.q10=fa.value.trim()}
+  goToNext();
+}
+
+function handleMAClick(el){
+  const isEx=el.dataset.exclusive==='true',container=el.parentElement;
+  if(isEx){
+    container.querySelectorAll('.ma-option').forEach(o=>{if(o!==el){o.classList.remove('selected');const f=o.querySelector('.inline-text');if(f)f.classList.add('hidden')}});
+    el.classList.toggle('selected');
+  } else {
+    container.querySelectorAll('.ma-option[data-exclusive="true"]').forEach(o=>o.classList.remove('selected'));
+    el.classList.toggle('selected');
+  }
+  if(el.classList.contains('selected'))emitSparkles(el);
+  const ft=el.querySelector('.inline-text');
+  if(ft){if(el.classList.contains('selected')){ft.classList.remove('hidden');ft.focus()}else ft.classList.add('hidden')}
+}
+
+function getOptDef(qid,val){
+  const q=Q[qid];if(!q)return null;
+  const opts=q.options||(q.steps&&q.steps[0]&&q.steps[0].options);
+  return opts?opts.find(o=>o.v===val):null;
+}
+
+function handleMASubmit(qid){
+  const first=document.querySelector(`[data-qid="${qid}"]`);if(!first)return;
+  const container=first.closest('.q-card')||first.parentElement;
+  const selected=container.querySelectorAll('.ma-option.selected');
+  if(selected.length===0){showInlineError(container,'\u3072\u3068\u3064\u4EE5\u4E0A\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044');return}
+  let valid=true;
+  selected.forEach(el=>{
+    const ft=el.querySelector('.inline-text');
+    const opt=getOptDef(qid,el.dataset.val);
+    if(ft&&!ft.classList.contains('hidden')&&opt&&opt.freeTextRequired&&!ft.value.trim()){ft.style.borderColor='var(--error)';valid=false}
   });
-
-  const loading = document.getElementById('loading');
-  loading.classList.add('show');
-
-  fetch(GAS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(answers)
-  })
-  .then(() => { loading.classList.remove('show'); showSlide(10); })
-  .catch(() => { loading.classList.remove('show'); showSlide(10); });
+  if(!valid)return;
+  const vals=[],texts={};
+  selected.forEach(el=>{vals.push(el.dataset.val);const ft=el.querySelector('.inline-text');if(ft&&ft.value.trim())texts[el.dataset.val]=ft.value.trim()});
+  answers[qid]=vals.join(',');
+  if(Object.keys(texts).length)answers[qid+'_text']=JSON.stringify(texts);
+  goToNext();
 }
 
-// === Rive animation ===
-function initRive(canvasId) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  new rive.Rive({
-    src: 'happy.riv',
-    canvas: canvas,
-    autoplay: true,
-    fit: rive.Fit.Contain,
-  });
+function handleFASubmit(qid){
+  const q=Q[qid],ta=document.getElementById('fa_'+qid),v=ta.value.trim(),err=document.getElementById('err_'+qid);
+  if(q.required&&!v){err.classList.add('show');ta.style.borderColor='var(--error)';return}
+  err.classList.remove('show');ta.style.borderColor='';answers[qid]=v;goToNext();
 }
 
-init();
-initRive('snappyIntro');
+function handleNPSClick(el,qid){
+  document.querySelectorAll('.nps-star').forEach(s=>{s.classList.remove('selected');s.style.animation='none'});
+  void el.offsetHeight;
+  el.classList.add('selected');el.style.animation='';answers[qid]=el.dataset.val;
+  // ripple "ぼちょん" effect
+  for(let i=0;i<2;i++){
+    const r=document.createElement('div');r.className='nps-ripple';
+    r.style.animationDelay=i*0.12+'s';
+    el.appendChild(r);setTimeout(()=>r.remove(),700);
+  }
+  // reveal Q8 inline
+  const fa=document.getElementById('npsFAWrap');
+  if(fa&&fa.classList.contains('hidden-step')){
+    fa.classList.remove('hidden-step');
+    fa.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+function handleNPSSubmit(qid){
+  if(!answers[qid]){document.getElementById('err_'+qid).classList.add('show');return}
+  document.getElementById('err_'+qid).classList.remove('show');
+  // collect Q8 inline FA
+  const fa=document.getElementById('fa_q8');
+  if(fa)answers.q8=fa.value.trim();
+  goToNext();
+}
 
-// Init complete animation when slide 9 is shown
-const origShowSlide = showSlide;
-showSlide = function(n) {
-  origShowSlide(n);
-  if (n === 10) initRive('snappyComplete');
-};
+function handleLikertClick(el){
+  const card=el.closest('.matrix-card');card.querySelectorAll('.likert-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');answers[el.dataset.key]=el.dataset.val;
+  card.classList.add('answered');card.style.borderColor='';
+  emitSparkles(el,2);
+}
+function handleMatrixSubmit(qid){
+  const q=Q[qid];let ok=true;
+  q.rows.forEach(r=>{if(!answers[r.key]){ok=false;const c=document.querySelector(`.matrix-card[data-key="${r.key}"]`);if(c)c.style.borderColor='var(--error)'}});
+  if(!ok){document.getElementById('err_'+qid).classList.add('show');return}
+  document.getElementById('err_'+qid).classList.remove('show');goToNext();
+}
+
+function handleSkip(qid){answers[qid]='';goToNext()}
+
+/* Q35 inline handler (all 3 steps on one page) */
+let q35phase=0; // 0=MA, 1=SA visible, 2=FA visible
+function handleQ35Submit(){
+  const card=document.querySelector('[data-qid="q35_s0"]')?.closest('.q-card');if(!card)return;
+  if(q35phase===0){
+    // validate MA
+    const selected=card.querySelectorAll('.ma-option.selected');
+    if(selected.length===0){showInlineError(card,'ひとつ以上選択してください');return}
+    let valid=true;
+    selected.forEach(el=>{const ft=el.querySelector('.inline-text');const allO=Q.q35.steps[0].options;const opt=allO.find(o=>o.v===el.dataset.val);
+      if(ft&&!ft.classList.contains('hidden')&&opt&&opt.freeTextRequired&&!ft.value.trim()){ft.style.borderColor='var(--error)';valid=false}});
+    if(!valid)return;
+    const vals=[],texts={};
+    selected.forEach(el=>{vals.push(el.dataset.val);const ft=el.querySelector('.inline-text');if(ft&&ft.value.trim())texts[el.dataset.val]=ft.value.trim()});
+    answers.q35_ma=vals.join(',');if(Object.keys(texts).length)answers.q35_ma_text=JSON.stringify(texts);
+    if(vals.length===1&&vals[0]==='8'){goToNext();return}
+    // show step 2 (SA)
+    const s2=document.getElementById('q35step2');s2.classList.remove('hidden-step');
+    const optsDiv=document.getElementById('q35s1opts');optsDiv.innerHTML='';
+    const allOpts=shuffledOptions['q35_s0']||Q.q35.steps[0].options;
+    allOpts.filter(o=>vals.includes(o.v)).forEach(o=>{
+      optsDiv.innerHTML+=`<div class="sa-option" data-qid="q35_s1" data-val="${o.v}" onclick="handleQ35S1Select(this)">
+        <div class="radio"></div><div>${escHtml(o.label)}</div></div>`;
+    });
+    q35phase=1;
+    document.getElementById('q35btn').textContent='次へ';
+    s2.scrollIntoView({behavior:'smooth',block:'start'});
+  } else if(q35phase===1){
+    const sel=card.querySelector('.sa-option.selected[data-qid="q35_s1"]');
+    if(!sel){showInlineError(card,'ひとつ選んでください');return}
+    answers.q35_sa=sel.dataset.val;
+    const s3=document.getElementById('q35step3');s3.classList.remove('hidden-step');
+    q35phase=2;
+    document.getElementById('q35btn').textContent='次へ';
+    s3.scrollIntoView({behavior:'smooth',block:'start'});
+  } else {
+    const ta=document.getElementById('fa_q35_s2'),v=ta.value.trim(),err=document.getElementById('err_q35_s2');
+    if(!v){err.classList.add('show');ta.style.borderColor='var(--error)';return}
+    err.classList.remove('show');answers.q35_fa=v;goToNext();
+  }
+}
+function handleQ35S1Select(el){
+  el.parentElement.querySelectorAll('.sa-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  emitSparkles(el);
+}
+/* CTA handlers (Q36/Q37) */
+function handleCTASelect(el){
+  const container=el.closest('.cta-card');
+  container.querySelectorAll('.cta-ok').forEach(o=>o.classList.remove('cta-selected'));
+  el.classList.add('cta-selected');
+  if(el.dataset.val==='1')burstConfetti(el);
+}
+function handleCTASubmit(qid){
+  const sel=document.querySelector(`.cta-ok.cta-selected[data-qid="${qid}"]`);
+  if(!sel){const c=document.querySelector('.cta-card');if(c)showInlineError(c,'選択してください');return}
+  answers[qid]=sel.dataset.val;
+  goToNext();
+}
+function burstConfetti(btn){
+  const rect=btn.getBoundingClientRect(),emojis=['🎉','✨','🙌','💚','⭐'];
+  for(let i=0;i<8;i++){
+    const el=document.createElement('div');el.className='confetti';el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.cssText=`left:${rect.left+rect.width/2+((Math.random()-.5)*80)}px;top:${rect.top-10}px;animation-delay:${Math.random()*.2}s`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),1200);
+  }
+}
+
+function showInlineError(container,msg){
+  let e=container.querySelector('.inline-error');
+  if(!e){e=document.createElement('div');e.className='error-msg show inline-error';e.textContent=msg;
+    const b=container.querySelector('.btn-next');if(b)container.insertBefore(e,b);else container.appendChild(e)}
+  else{e.textContent=msg;e.classList.add('show')}
+  setTimeout(()=>e.classList.remove('show'),3000);
+}
+
+/* ── Submit ────────────────────────────────────────── */
+async function submitSurvey(){
+  const data={...answers,timestamp:new Date().toISOString(),user_agent:navigator.userAgent,token:POST_TOKEN};
+  document.getElementById('submitting').classList.remove('hidden');
+  document.getElementById('progressWrap').style.display='none';
+  try{await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),mode:'no-cors'});console.log('Survey submitted',data)}
+  catch(e){console.error('Submit error',e)}
+  finally{document.getElementById('submitting').classList.add('hidden')}
+}
+
+/* ── Rive ──────────────────────────────────────────── */
+function initRive(canvasId){
+  try{const c=document.getElementById(canvasId);if(!c)return;
+    new rive.Rive({src:'happy.riv',canvas:c,autoplay:true,fit:rive.Fit.Contain,
+      onLoadError:()=>riveToEmoji(c)})}
+  catch(e){console.log('Rive init skipped:',e.message);
+    const c=document.getElementById(canvasId);if(c)riveToEmoji(c)}
+}
+function riveToEmoji(canvas){
+  const p=canvas.parentElement;if(!p)return;
+  canvas.style.display='none';
+  if(!p.querySelector('.mascot-emoji')){
+    const e=document.createElement('span');e.className='mascot-emoji';e.textContent='🐶';
+    e.style.cssText='font-size:28px;line-height:1;display:block';p.appendChild(e);
+  }
+}
+
+/* ── Init ──────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  showSlide('intro');
+  initRive('riveMascot');
+});
 </script>
 </body>
 </html>
