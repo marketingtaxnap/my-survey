@@ -251,7 +251,7 @@ const Q = {
       {v:'20',label:'✏️ その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q4:{type:'sa',autoAdvance:false,
-    text:'🏢 今年の確定申告に、不動産所得は含まれていますか？',
+    text:'🏢 2025年度分（2026年2,3月提出）の確定申告に、不動産所得は含まれていますか？',
     options:[{v:'1',label:'はい'},{v:'2',label:'いいえ'}],order:'fixed',required:true},
   q5:{type:'sa',autoAdvance:false,
     text:'タックスナップを使って確定申告書の作成はしましたか？',
@@ -266,6 +266,16 @@ const Q = {
       {v:'1',label:'0回（まだしたことがない）'},{v:'2',label:'1回'},
       {v:'3',label:'2回'},{v:'4',label:'3〜5回'},
       {v:'5',label:'6〜10回'},{v:'6',label:'それ以上'},{v:'7',label:'わからない'}
+    ],order:'fixed',required:true},
+  q6b:{type:'sa',autoAdvance:false,
+    text:'タックスナップのことをいつ知りましたか？',
+    options:[
+      {v:'1',label:'2026年3月'},
+      {v:'2',label:'2026年2月'},
+      {v:'3',label:'2026年1月'},
+      {v:'4',label:'2025年4〜12月'},
+      {v:'5',label:'2025年1〜3月'},
+      {v:'6',label:'覚えてない・分からない'}
     ],order:'fixed',required:true},
   q7:{type:'nps',
     text:'あなたはタックスナップを友人や知人にどの程度オススメしたいと思いますか？',
@@ -549,7 +559,8 @@ function getNextSlide(cur){
   if(cur==='q3') return 'q4';
   if(cur==='q4') return 'q5';
   if(cur==='q5') return 'q6';
-  if(cur==='q6') return 'q7';
+  if(cur==='q6') return 'q6b';
+  if(cur==='q6b') return 'q7';
   if(cur==='q7') return 'q9'; /* Q8 is inline with Q7 */
   if(cur==='q9'){ /* Q10 is inline with Q9 */
     if(['1','2'].includes(answers.q2)||answers.q4==='1') return 'q11';
