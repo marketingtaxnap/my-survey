@@ -251,7 +251,7 @@ const Q = {
       {v:'20',label:'✏️ その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q4:{type:'sa',autoAdvance:false,
-    text:'🏢 2025年度分（2026年2,3月提出）の確定申告に、不動産所得は含まれていますか？',
+    text:'2025年度分（2026年2,3月提出）の確定申告に、不動産所得は含まれていますか？',
     options:[{v:'1',label:'はい'},{v:'2',label:'いいえ'}],order:'fixed',required:true},
   q5:{type:'sa',autoAdvance:false,
     text:'タックスナップを使って確定申告書の作成はしましたか？',
@@ -275,7 +275,8 @@ const Q = {
       {v:'3',label:'2026年1月'},
       {v:'4',label:'2025年4〜12月'},
       {v:'5',label:'2025年1〜3月'},
-      {v:'6',label:'覚えてない・分からない'}
+      {v:'6',label:'それより前'},
+      {v:'7',label:'覚えてない・分からない'}
     ],order:'fixed',required:true},
   q7:{type:'nps',
     text:'あなたはタックスナップを友人や知人にどの程度オススメしたいと思いますか？',
@@ -508,7 +509,7 @@ const Q = {
       {key:'q33_1',label:'🏦 【信用が貯まる】仕訳や確定申告をすることで信用スコアが上がり、融資枠や金利優遇が自動でついてくる！'},
       {key:'q33_2',label:'🎯 【ポイントが貯まる】日々の仕訳・経費入力でポイントが貯まり、利用料や提携サービスに使える！'},
       {key:'q33_3',label:'📞 【電話サポート】初期設定から使い方まで、電話でサポートが受けられる！'},
-      {key:'q33_4',label:'💬 【LINEで完結】LINEで会話やタップするだけ！相談もできる。アプリを開かず申告が9割終わる！'}
+      {key:'q33_4',label:'💬 【LINEで完結】LINEで会話やタップするだけ！相談もできる。アプリを開かず確定申告が9割終わる！'}
     ],
     cols:['非常に使いたい','やや使いたい','どちらともいえない','あまり使いたくない','全く使いたくない'],
     required:true},
@@ -901,7 +902,8 @@ function renderComplete(){
   return `<div class="complete-card">
     <canvas class="rive-complete" id="riveComplete" width="300" height="300"></canvas>
     <div class="done-text">ご回答ありがとうございます！</div>
-    <div class="done-sub">アンケートを送信しました。</div></div>`;
+    <div class="done-sub">アンケートを送信しました。</div>
+    <div style="margin-top:20px;padding:14px 16px;background:var(--brand-light);border-radius:10px;font-size:12px;color:var(--text-sub);line-height:1.7;text-align:left">🎁 抽選でAmazonギフト券が当選された方には、アンケート開始時にご入力いただいたメールアドレス宛にご連絡いたします！</div></div>`;
 }
 
 /* ── Slide transition ─────────────────────────────── */
