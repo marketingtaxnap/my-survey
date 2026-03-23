@@ -14,14 +14,13 @@
 html{font-size:16px}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased}
 .container{width:100%;max-width:480px;margin:0 auto;padding:0 16px;position:relative;min-height:100dvh;overflow:hidden}
+/* logo */
+.logo-bar{text-align:center;padding:12px 0 0;position:sticky;top:0;z-index:101;background:var(--bg)}
+.logo-bar img{height:24px}
 /* progress */
-.progress-wrap{position:sticky;top:0;z-index:100;background:var(--bg);padding:40px 0 4px}
+.progress-wrap{position:sticky;top:36px;z-index:100;background:var(--bg);padding:8px 0 4px}
 .progress-track{position:relative;height:6px;border-radius:3px;background:#e0e0e0;overflow:visible}
 .progress-fill{height:100%;background:var(--brand);border-radius:3px;transition:width .4s ease}
-.progress-mascot{position:absolute;bottom:4px;transition:left .6s cubic-bezier(.34,1.56,.64,1);pointer-events:none;line-height:1}
-.progress-mascot canvas{width:36px;height:36px;display:block}
-.progress-mascot.walk{animation:mascotWalk .3s ease 2}
-@keyframes mascotWalk{0%{transform:translateY(0)}25%{transform:translateY(-5px)}50%{transform:translateY(0)}75%{transform:translateY(-5px)}100%{transform:translateY(0)}}
 /* slides */
 .slide-area{position:relative;width:100%;flex:1}
 .slide{position:absolute;top:0;left:0;width:100%;opacity:0;transform:translateX(40px);transition:all .4s ease;pointer-events:none;padding-bottom:80px}
@@ -187,12 +186,10 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 </head>
 <body>
 <div class="container" id="app">
+  <div class="logo-bar"><img src="taxnap_logo.png" alt="タックスナップ"></div>
   <div class="progress-wrap" id="progressWrap">
     <div class="progress-track">
       <div class="progress-fill" id="progressFill" style="width:0%"></div>
-      <div class="progress-mascot" id="progressMascot" style="left:0%">
-        <canvas id="riveMascot" width="72" height="72"></canvas>
-      </div>
     </div>
   </div>
   <div class="slide-area" id="slideArea"></div>
@@ -241,7 +238,7 @@ const Q = {
   q3:{type:'sa',autoAdvance:false,
     text:'あなたの個人事業の職種を教えてください。\n※副業の方は副業の職種を教えてください。\n※複数に該当する場合は、最も活動の多い職種を選択してください。',
     options:[
-      {v:'1',label:'📦 倉庫作業員'},{v:'2',label:'🚗 ドライバー'},{v:'3',label:'🛒 EC販売・せどり'},
+      {v:'1',label:'📦 倉庫作業員'},{v:'2',label:'🚚 ドライバー'},{v:'3',label:'🛒 EC販売・せどり'},
       {v:'4',label:'🔨 一人親方'},{v:'5',label:'📱 インフルエンサー・ライバー'},
       {v:'6',label:'🎨 クリエイター（イラストレーター、動画制作など）'},
       {v:'7',label:'✂️ 美容師・理容師・ネイリスト'},{v:'8',label:'💆 セラピスト・エステティシャン'},
@@ -490,7 +487,7 @@ const Q = {
     text:'タックスナップで改善してほしいことは何ですか？',
     options:[
       {v:'1',label:'🖱️ 操作の分かりやすさ'},{v:'2',label:'✅ 確定申告の精度や信頼性'},
-      {v:'3',label:'📞 サポート体制'},{v:'4',label:'⚡ アプリの動作速度・安定性'},
+      {v:'3',label:'🙋 サポート体制'},{v:'4',label:'⚡ アプリの動作速度・安定性'},
       {v:'5',label:'💰 料金体系・コスト面'},{v:'6',label:'🔧 機能追加や連携サービスの充実'},
       {v:'7',label:'特にない',exclusive:true},
       {v:'8',label:'その他',freeText:true,freeTextRequired:true}
@@ -548,7 +545,7 @@ const Q = {
 /* ── Branching ────────────────────────────────────── */
 function getNextSlide(cur){
   if(cur==='intro') return 'q2';
-  if(cur==='q2') return ['1','2'].includes(answers.q2)?'q3':'q4';
+  if(cur==='q2') return ['1','2','3'].includes(answers.q2)?'q3':'q4';
   if(cur==='q3') return 'q4';
   if(cur==='q4') return 'q5';
   if(cur==='q5') return 'q6';
@@ -613,15 +610,6 @@ function getVisibleQNum(qid){
 function updateProgress(){
   const t=countTotalSlides(),c=getSlideIndex(),p=Math.min(Math.round(c/t*100),100);
   document.getElementById('progressFill').style.width=p+'%';
-  // move mascot along progress bar
-  const mascot=document.getElementById('progressMascot');
-  if(mascot){
-    mascot.style.left=`calc(${p}% - 18px)`;
-    mascot.classList.remove('walk');
-    void mascot.offsetHeight;
-    mascot.classList.add('walk');
-    setTimeout(()=>mascot.classList.remove('walk'),700);
-  }
 }
 function qHeader(qid,type,optional){
   const n=getVisibleQNum(qid);
@@ -900,7 +888,7 @@ function renderCTA(qid){
 
 function renderComplete(){
   return `<div class="complete-card">
-    <canvas class="rive-complete" id="riveComplete"></canvas>
+    <canvas class="rive-complete" id="riveComplete" width="300" height="300"></canvas>
     <div class="done-text">ご回答ありがとうございます！</div>
     <div class="done-sub">アンケートを送信しました。</div></div>`;
 }
@@ -1267,7 +1255,6 @@ function riveToEmoji(canvas){
 /* ── Init ──────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
   showSlide('intro');
-  initRive('riveMascot');
 });
 </script>
 </body>
