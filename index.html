@@ -39,6 +39,11 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .intro-speech.show{opacity:1;transform:translateY(0)}
 .intro-speech p{font-size:13px;font-weight:700;color:var(--brand)}
 .intro-speech::after{content:'';position:absolute;bottom:-5px;left:20px;width:10px;height:10px;background:#fff;transform:rotate(45deg);box-shadow:1px 1px 2px rgba(0,0,0,.04)}
+/* incentive banner */
+.intro-incentive{background:linear-gradient(135deg,#fff8e1 0%,#fff3cd 100%);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;border:1.5px solid #f0d060}
+.intro-incentive .incentive-icon{font-size:32px;flex-shrink:0}
+.intro-incentive .incentive-text{font-size:13px;font-weight:700;color:#8b6914;line-height:1.5}
+.intro-incentive .incentive-text .incentive-highlight{color:#d63031;font-size:17px}
 .intro-body{padding:0 20px 24px}
 .intro-badge{display:inline-block;background:var(--brand);color:#fff;font-size:13px;font-weight:700;padding:5px 16px;border-radius:50px;margin-bottom:12px}
 .intro-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.5}
@@ -53,6 +58,9 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .q-hint{font-size:11px;color:var(--text-light);margin-bottom:10px}
 .q-text{font-size:15px;font-weight:700;line-height:1.7;margin-bottom:20px;white-space:pre-line}
 .optional-badge{display:inline-block;background:#eee;color:#999;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:6px;font-weight:400}
+/* info callout */
+.info-callout{background:var(--brand-light);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--text-sub);line-height:1.6}
+.info-callout strong{color:var(--brand);font-weight:700}
 /* SA options */
 .sa-option{display:flex;align-items:center;padding:13px 16px;border:2px solid #e8e8e8;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:14px;line-height:1.5;user-select:none}
 .sa-option:hover{border-color:var(--brand-light);background:var(--brand-light)}
@@ -60,11 +68,16 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .sa-option .radio{width:20px;height:20px;border:2px solid #ccc;border-radius:50%;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .sa-option.selected .radio{border-color:var(--brand);background:var(--brand)}
 .sa-option.selected .radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+/* SA rich (badge+desc) */
+.sa-option .opt-badge{display:inline-block;background:var(--brand);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:50px;margin-bottom:4px}
+.sa-option .opt-desc{font-size:14px;color:var(--text)}
+.sa-option .opt-sub{font-size:11px;color:var(--text-light);margin-top:2px}
+.sa-option .opt-icon{font-size:22px;margin-right:10px;flex-shrink:0}
 /* MA options */
-.ma-option{display:flex;align-items:flex-start;padding:13px 16px;border:2px solid #e8e8e8;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:14px;line-height:1.5;user-select:none}
+.ma-option{display:flex;align-items:flex-start;padding:13px 16px;border:2px dashed #d0d0d0;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;font-size:14px;line-height:1.5;user-select:none}
 .ma-option:hover{border-color:var(--brand-light);background:var(--brand-light)}
-.ma-option.selected{border-color:var(--brand);background:var(--brand-light);font-weight:500;animation:optionPop .3s ease}
-.ma-option .checkbox{width:20px;height:20px;border:2px solid #ccc;border-radius:5px;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.ma-option.selected{border:2px solid var(--brand);background:var(--brand-light);font-weight:500;animation:optionPop .3s ease}
+.ma-option .checkbox{width:20px;height:20px;border:2px solid #ccc;border-radius:5px;margin-left:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
 .ma-option.selected .checkbox{border-color:var(--brand);background:var(--brand)}
 .ma-option.selected .checkbox::after{content:'\2713';color:#fff;font-size:13px;font-weight:700}
 @keyframes optionPop{0%{transform:scale(1)}25%{transform:scale(1.035)}50%{transform:scale(.99)}100%{transform:scale(1)}}
@@ -96,7 +109,9 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 /* matrix */
 .matrix-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:2px solid #eee;transition:border-color .3s,box-shadow .3s}
 .matrix-card.answered{border-color:var(--brand);box-shadow:0 0 0 1px rgba(39,186,116,.15)}
-.matrix-card .concept{font-size:14px;font-weight:600;line-height:1.6;margin-bottom:14px}
+.matrix-card .concept{margin-bottom:14px}
+.matrix-card .concept-title{display:inline-block;background:var(--brand);color:#fff;font-weight:700;font-size:13px;padding:4px 14px;border-radius:50px;margin-bottom:8px}
+.matrix-card .concept-desc{font-size:14px;color:var(--text);line-height:1.7;font-weight:500}
 .likert-row{display:flex;gap:0;justify-content:space-between}
 .likert-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px 8px;cursor:pointer;transition:all .2s;user-select:none;border-radius:10px;background:transparent}
 .likert-btn:hover{background:var(--brand-light)}
@@ -108,18 +123,36 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 /* Q35 inline steps */
 .q35-step{margin-top:20px;padding-top:20px;border-top:1px solid #eee}
 .q35-step.hidden-step{display:none}
+.hidden-step{display:none}
 .q35-step .q-text{font-size:14px;font-weight:600;margin-bottom:14px}
+/* funnel step (Q11) */
+.funnel-flow{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:20px;padding:0 4px}
+.funnel-step{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.funnel-step .step-circle{width:36px;height:36px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .3s}
+.funnel-step .step-name{font-size:10px;color:var(--text-light);text-align:center;line-height:1.2}
+.funnel-arrow{color:#ccc;font-size:14px;padding-bottom:14px;position:relative}
+.funnel-arrow .arrow-x{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:10px;color:#e74c3c;font-weight:700;opacity:0;transition:opacity .3s}
+.funnel-arrow .arrow-x.show{opacity:1}
+.funnel-step.active .step-circle{background:var(--brand);box-shadow:0 0 8px rgba(39,186,116,.3)}
+.funnel-option{display:flex;align-items:center;padding:14px 16px;border:2px solid #e8e8e8;border-radius:12px;margin-bottom:10px;cursor:pointer;transition:all .2s;user-select:none}
+.funnel-option:hover{border-color:var(--brand-light);background:var(--brand-light)}
+.funnel-option.selected{border-color:var(--brand);background:var(--brand-light);font-weight:500;animation:optionPop .3s ease}
+.funnel-option .radio{width:20px;height:20px;border:2px solid #ccc;border-radius:50%;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.funnel-option.selected .radio{border-color:var(--brand);background:var(--brand)}
+.funnel-option.selected .radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+.funnel-option .funnel-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--brand);background:var(--brand-light);padding:2px 8px;border-radius:4px;margin-right:8px;flex-shrink:0}
+.funnel-option .funnel-label{font-size:13px;color:var(--text);line-height:1.5}
 /* Q36/Q37 CTA */
 .cta-card{background:var(--card);border-radius:var(--radius);padding:32px 20px;box-shadow:var(--shadow);margin-top:16px;text-align:center}
 .cta-card .q-number{text-align:left}
 .cta-card .cta-text{font-size:15px;font-weight:500;line-height:1.7;margin-bottom:24px;color:var(--text)}
 .cta-card .cta-sub{font-size:12px;color:var(--text-light);margin-bottom:20px;line-height:1.6}
-.cta-ok{display:inline-block;padding:16px 48px;background:var(--brand);color:#fff;border:none;border-radius:50px;font-size:18px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(39,186,116,.3)}
-.cta-ok:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(39,186,116,.4)}
-.cta-no{background:#f0f0f0;color:var(--text-sub);box-shadow:none}
-.cta-no:hover{background:#e8e8e8;transform:translateY(-2px);box-shadow:none}
-.cta-ok.cta-selected{transform:scale(1.05);box-shadow:0 4px 20px rgba(39,186,116,.4)}
-.cta-no.cta-selected{background:var(--text-sub);color:#fff;transform:scale(1.05)}
+.cta-ok{display:inline-block;padding:16px 48px;background:#fff;color:var(--text);border:2px solid #e0e0e0;border-radius:50px;font-size:18px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all .2s;box-shadow:none}
+.cta-ok:hover{transform:translateY(-2px);border-color:var(--brand);color:var(--brand)}
+.cta-no{background:#fff;color:var(--text-sub)}
+.cta-no:hover{border-color:#aaa;color:var(--text-sub);transform:translateY(-2px)}
+.cta-ok.cta-selected{background:var(--brand);color:#fff;border-color:var(--brand);transform:scale(1.05);box-shadow:0 4px 16px rgba(39,186,116,.3)}
+.cta-no.cta-selected{background:var(--text-sub);color:#fff;border-color:var(--text-sub);transform:scale(1.05)}
 .cta-ok:active{transform:scale(.96)}
 .cta-ok.done{background:#f0f0f0;color:var(--text-light);box-shadow:none;pointer-events:none}
 .cta-skip{display:block;margin:14px auto 0;background:none;border:none;color:var(--text-light);font-size:13px;font-family:'Noto Sans JP',sans-serif;cursor:pointer}
@@ -200,10 +233,9 @@ const Q = {
   q2:{type:'sa',autoAdvance:false,
     text:'現在の働き方を教えてください。',
     options:[
-      {v:'1',label:'【事業所得】専業フリーランス・個人事業主'},
-      {v:'2',label:'【事業所得＋給与所得】副業フリーランス・個人事業主'},
-      {v:'3',label:'【給与所得＋雑所得】副業フリーランス・個人事業主'},
-      {v:'4',label:'【給与所得】正社員・アルバイト・パート'},
+      {v:'1',label:'フリーランス・個人事業主'},
+      {v:'sub',label:'会社員＋副業'},
+      {v:'4',label:'会社員・パート・アルバイト'},
       {v:'5',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'fixed',required:true},
   q3:{type:'sa',autoAdvance:false,
@@ -249,16 +281,18 @@ const Q = {
       {v:'3',label:'🤔 どちらとも言えない'},{v:'4',label:'😐 あまり困らない'},{v:'5',label:'😊 全く困らない'}
     ],order:'fixed',required:true},
   q10:{type:'fa',text:'選んだ理由を是非教えてくださいm(_)m',required:false},
-  q11:{type:'sa',autoAdvance:false,
-    text:'タックスナップのご利用状況を教えてください。\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+  q11:{type:'sa_funnel',autoAdvance:false,
+    text:'タックスナップのご利用状況を教えてください。',
+    callout:'<strong>「無料トライアル登録」とは？</strong><br>決済ページにクレジットカード情報を入力してトライアルを開始した状態',
     options:[
-      {v:'1',label:'ダウンロードしたが、無料トライアルには登録していない'},
-      {v:'2',label:'無料トライアルに登録したが、有料課金せずキャンセルした'},
-      {v:'3',label:'タックスナップに有料課金した'},
+      {v:'1',label:'ダウンロードだけして、無料トライアルには登録していない',step:'📥'},
+      {v:'2',label:'無料トライアルに登録したが、有料課金せずキャンセルした',step:'🔄'},
+      {v:'3',label:'タックスナップに有料課金した',step:'💳'},
       {v:'4',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'fixed',required:true},
   q12:{type:'sa',autoAdvance:false,
-    text:'タックスナップをダウンロードしたのに、無料トライアルに登録しなかった最も大きな理由は何ですか？\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+    text:'タックスナップをダウンロードしたのに、無料トライアルに登録しなかった最も大きな理由は何ですか？',
+    callout:'<strong>「無料トライアル登録」とは？</strong><br>決済ページにクレジットカード情報を入力してトライアルを開始した状態',
     options:[
       {v:'1',label:'とりあえずダウンロードしただけ・他手法で申告することを決めていた'},
       {v:'2',label:'使い方がわからなかった・操作で行き詰まった'},
@@ -272,12 +306,12 @@ const Q = {
   q13:{type:'sa',autoAdvance:false,
     text:'「とりあえずダウンロードしただけ・他の手法で進めていた」とのことですが、最もあてはまるものを1つ選んでください。',
     options:[
-      {v:'a',label:'freeeで進めていた'},{v:'b',label:'マネーフォワードで進めていた'},
-      {v:'c',label:'弥生で進めていた'},{v:'d',label:'その他の会計ソフトで進めていた'},
-      {v:'e',label:'税理士に依頼していた'},{v:'f',label:'紙やノートで進めていた'},
-      {v:'g',label:'スプレッドシート/Excelで進めていた'},{v:'h',label:'友人・家族に依頼していた'},
-      {v:'i',label:'手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
-      {v:'j',label:'その他',freeText:true,freeTextRequired:true}
+      {v:'a',label:'💚 freeeで進めていた'},{v:'b',label:'💜 マネーフォワードで進めていた'},
+      {v:'c',label:'🟡 弥生で進めていた'},{v:'d',label:'📊 その他の会計ソフトで進めていた'},
+      {v:'e',label:'👨‍⚖️ 税理士に依頼していた'},{v:'f',label:'📄 紙やノートで進めていた'},
+      {v:'g',label:'📈 スプレッドシート/Excelで進めていた'},{v:'h',label:'👨‍👩‍👦 友人・家族に依頼していた'},
+      {v:'i',label:'🤔 手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
+      {v:'j',label:'✏️ その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last2',required:true},
   q14:{type:'ma',
     text:'使い方がわからなかった・行き詰まった場面として、あてはまるものをすべてお答えください。',
@@ -339,7 +373,8 @@ const Q = {
       {v:'g',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q20:{type:'sa',autoAdvance:false,
-    text:'タックスナップの無料トライアルをキャンセルした最も大きな理由は何ですか？\n※「無料トライアル登録」とは？：決済ページにクレジットカード情報を入力してトライアルを開始した状態',
+    text:'タックスナップの無料トライアルをキャンセルした最も大きな理由は何ですか？',
+    callout:'<strong>「無料トライアル登録」とは？</strong><br>決済ページにクレジットカード情報を入力してトライアルを開始した状態',
     options:[
       {v:'1',label:'とりあえず試してみただけ・他手法で申告することを決めていた'},
       {v:'2',label:'使い方がわからなかった・操作で行き詰まった'},
@@ -454,9 +489,9 @@ const Q = {
   q32:{type:'ma',
     text:'タックスナップで改善してほしいことは何ですか？',
     options:[
-      {v:'1',label:'操作の分かりやすさ'},{v:'2',label:'確定申告の精度や信頼性'},
-      {v:'3',label:'サポート体制'},{v:'4',label:'アプリの動作速度・安定性'},
-      {v:'5',label:'料金体系・コスト面'},{v:'6',label:'機能追加や連携サービスの充実'},
+      {v:'1',label:'🖱️ 操作の分かりやすさ'},{v:'2',label:'✅ 確定申告の精度や信頼性'},
+      {v:'3',label:'📞 サポート体制'},{v:'4',label:'⚡ アプリの動作速度・安定性'},
+      {v:'5',label:'💰 料金体系・コスト面'},{v:'6',label:'🔧 機能追加や連携サービスの充実'},
       {v:'7',label:'特にない',exclusive:true},
       {v:'8',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last2',required:true},
@@ -465,7 +500,7 @@ const Q = {
     rows:[
       {key:'q33_1',label:'🏦 【信用が貯まる】仕訳や確定申告をすることで信用スコアが上がり、融資枠や金利優遇が自動でついてくる！'},
       {key:'q33_2',label:'🎯 【ポイントが貯まる】日々の仕訳・経費入力でポイントが貯まり、利用料や提携サービスに使える！'},
-      {key:'q33_3',label:'🤝 【対面サポート】初期設定から使い方まで、対面でも電話でもサポートが受けられる！'},
+      {key:'q33_3',label:'📞 【電話サポート】初期設定から使い方まで、電話でサポートが受けられる！'},
       {key:'q33_4',label:'💬 【LINEで完結】LINEで会話やタップするだけ！相談もできる。アプリを開かず申告が9割終わる！'}
     ],
     cols:['非常に使いたい','やや使いたい','どちらともいえない','あまり使いたくない','全く使いたくない'],
@@ -497,7 +532,7 @@ const Q = {
           {v:'9',label:'✏️ その他',freeText:true,freeTextRequired:true}
         ],order:'randomize_last2',required:true},
       {type:'sa_from_prev',text:'その中で、最も課題に感じていることを1つ教えてください。',required:true},
-      {type:'fa',text:'具体的に何が苦労か教えてください。',required:true}
+      {type:'fa',text:'どんな苦労があるのか、ぜひ教えてください！',required:true}
     ]},
   q36:{type:'sa',autoAdvance:false,
     text:'もしよろしければタックスナップについてアプリストア（App Store / Google Play）から評価していただけると嬉しいです！',
@@ -513,7 +548,7 @@ const Q = {
 /* ── Branching ────────────────────────────────────── */
 function getNextSlide(cur){
   if(cur==='intro') return 'q2';
-  if(cur==='q2') return ['1','2','3'].includes(answers.q2)?'q3':'q4';
+  if(cur==='q2') return ['1','2'].includes(answers.q2)?'q3':'q4';
   if(cur==='q3') return 'q4';
   if(cur==='q4') return 'q5';
   if(cur==='q5') return 'q6';
@@ -634,25 +669,90 @@ function renderIntro(){
       <div class="intro-email-wrap">
         <input type="email" class="email-input" id="emailInput"
           placeholder="タックスナップ登録メールアドレス" autocomplete="email"
-          oninput="handleEmailTyping(this)" onfocus="handleEmailFocus()" onblur="handleEmailBlur()">
+          oninput="handleEmailTyping(this)">
         <span class="email-check" id="emailCheck">✅</span>
         <div class="error-msg" id="emailError">有効なメールアドレスを入力してください</div>
       </div>
-      <button class="btn-next" id="btnStart" onclick="handleIntroSubmit()">アンケートに答える 🚀</button>
-      <p style="text-align:center;font-size:11px;color:var(--text-light);margin-top:10px">回答は匿名で処理されます</p>
+      <div class="intro-incentive">
+        <span class="incentive-icon">🎁</span>
+        <div class="incentive-text">抽選で<span class="incentive-highlight">10名様</span>に<br>Amazonギフト券 <span class="incentive-highlight">2,000円分</span></div>
+      </div>
+      <button class="btn-next" id="btnStart" onclick="handleEmailSubmit()">アンケートに答える 🚀</button>
     </div>
   </div>`;
+}
+
+function renderFunnel(qid){
+  const q=Q[qid],opts=q.options;
+  let h=`<div class="q-card">${qHeader(qid,'sa',false)}
+    <div class="q-text">${escHtml(q.text)}</div>${q.callout?`<div class="info-callout">${q.callout}</div>`:''}
+    <div class="funnel-flow" id="funnelFlow">
+      <div class="funnel-step" data-step="1"><div class="step-circle">📥</div><div class="step-name">ダウンロード</div></div>
+      <div class="funnel-arrow" data-after="1">→<span class="arrow-x">✕</span></div>
+      <div class="funnel-step" data-step="2"><div class="step-circle">🔄</div><div class="step-name">トライアル</div></div>
+      <div class="funnel-arrow" data-after="2">→<span class="arrow-x">✕</span></div>
+      <div class="funnel-step" data-step="3"><div class="step-circle">💳</div><div class="step-name">有料課金</div></div>
+    </div>${qHint('sa')}`;
+  opts.forEach(o=>{
+    const ftId=`ft_${qid}_${o.v}`;
+    if(o.step){
+      h+=`<div class="funnel-option" data-qid="${qid}" data-val="${o.v}" data-fstep="${o.v}" onclick="handleFunnelClick(this)">
+        <div class="radio"></div><div class="funnel-label">${escHtml(o.label)}</div></div>`;
+    } else {
+      h+=`<div class="funnel-option" data-qid="${qid}" data-val="${o.v}" onclick="handleFunnelClick(this)">
+        <div class="radio"></div><div style="flex:1"><div class="funnel-label">${escHtml(o.label)}</div>
+        ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力してください" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+    }
+  });
+  h+=`<button class="btn-next" onclick="handleSASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
+  return h;
+}
+
+function handleFunnelClick(el){
+  const qid=el.dataset.qid,container=el.closest('.q-card');
+  container.querySelectorAll('.funnel-option').forEach(o=>{o.classList.remove('selected');const f=o.querySelector('.inline-text');if(f)f.classList.add('hidden')});
+  el.classList.add('selected');
+  emitSparkles(el);
+  // highlight funnel steps + show x on blocked arrow
+  const step=el.dataset.fstep;
+  container.querySelectorAll('.funnel-step').forEach(s=>{
+    const sv=s.dataset.step;
+    if(step&&parseInt(sv)<=parseInt(step))s.classList.add('active');
+    else s.classList.remove('active');
+  });
+  container.querySelectorAll('.funnel-arrow').forEach(a=>{
+    const x=a.querySelector('.arrow-x');if(!x)return;
+    const after=a.dataset.after;
+    if(step&&after===step)x.classList.add('show');
+    else x.classList.remove('show');
+  });
+  // freetext
+  const ft=el.querySelector('.inline-text');if(ft){ft.classList.remove('hidden');ft.focus()}
+}
+
+function handleQ2SubSelect(el){
+  document.querySelectorAll('[data-qid="q2sub"]').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  emitSparkles(el);
 }
 
 function renderSA(qid){
   const q=Q[qid],opts=getOrderedOptions(qid);
   let h=`<div class="q-card">${qHeader(qid,'sa',false)}
-    <div class="q-text">${escHtml(q.text)}</div>${qHint('sa')}`;
+    <div class="q-text">${escHtml(q.text)}</div>${q.callout?`<div class="info-callout">${q.callout}</div>`:''}${qHint('sa')}`;
   opts.forEach(o=>{
     const ftId=`ft_${qid}_${o.v}`;
     h+=`<div class="sa-option" data-qid="${qid}" data-val="${o.v}" onclick="handleSAClick(this,${!!o.freeText},${!!o.freeTextRequired})">
       <div class="radio"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
       ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+    // Q2: sub-question after 会社員＋副業
+    if(qid==='q2'&&o.v==='sub'){
+      h+=`<div class="hidden-step" id="q2SubWrap" style="margin:-4px 0 10px 32px;background:var(--brand-light);border-radius:10px;padding:14px 16px">
+        <div style="font-size:12px;font-weight:600;color:var(--brand);margin-bottom:10px">▶ 副業の収入をどのように申告していますか？</div>
+        <div class="sa-option" data-qid="q2sub" data-val="2" onclick="handleQ2SubSelect(this)" style="background:#fff"><div class="radio"></div><div>事業所得</div></div>
+        <div class="sa-option" data-qid="q2sub" data-val="3" onclick="handleQ2SubSelect(this)" style="background:#fff"><div class="radio"></div><div>雑所得</div></div>
+      </div>`;
+    }
   });
   // Q9: inline Q10 reason (same pattern as NPS+Q8)
   if(qid==='q9'){
@@ -673,8 +773,8 @@ function renderMA(qid){
   opts.forEach(o=>{
     const ftId=`ft_${qid}_${o.v}`;
     h+=`<div class="ma-option" data-qid="${qid}" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
-      <div class="checkbox"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+      <div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
   });
   h+=`<button class="btn-next" onclick="handleMASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
   return h;
@@ -712,13 +812,18 @@ function renderNPS(qid){
 function renderMatrix(qid){
   const q=Q[qid];
   const qText=q.html||escHtml(q.text);
-  const icons=['😍','🙂','🤔','😕','😣'];
-  const labels=['非常に\n使いたい','やや\n使いたい','どちらとも\nいえない','あまり使い\nたくない','全く使い\nたくない'];
+  const icons=['😣','😕','🤔','🙂','😍'];
+  const labels=['全く使い\nたくない','あまり使い\nたくない','どちらとも\nいえない','やや\n使いたい','非常に\n使いたい'];
+  const vals=[5,4,3,2,1];
   let h=`<div class="q-card">${qHeader(qid,'matrix',false)}
     <div class="q-text">${qText}</div>${qHint('matrix')}`;
   q.rows.forEach(r=>{
-    h+=`<div class="matrix-card" data-key="${r.key}"><div class="concept">${escHtml(r.label)}</div><div class="likert-row">`;
-    icons.forEach((ico,ci)=>{h+=`<div class="likert-btn" data-key="${r.key}" data-val="${ci+1}" onclick="handleLikertClick(this)"><span class="likert-icon">${ico}</span><span class="likert-label">${labels[ci].replace('\n','<br>')}</span></div>`});
+    const m=r.label.match(/^(.+?)【(.+?)】(.*)$/);
+    const emoji=m?escHtml(m[1].trim()):'';
+    const title=m?escHtml(m[2]):escHtml(r.label);
+    const desc=m&&m[3]?escHtml(m[3].trim()):'';
+    h+=`<div class="matrix-card" data-key="${r.key}"><div class="concept"><div class="concept-title">${emoji} ${title}</div>${desc?`<div class="concept-desc">${desc}</div>`:''}</div><div class="likert-row">`;
+    icons.forEach((ico,ci)=>{h+=`<div class="likert-btn" data-key="${r.key}" data-val="${vals[ci]}" onclick="handleLikertClick(this)"><span class="likert-icon">${ico}</span><span class="likert-label">${labels[ci].replace('\n','<br>')}</span></div>`});
     h+=`</div></div>`;
   });
   h+=`<div class="error-msg" id="err_${qid}">\u3059\u3079\u3066\u306E\u9805\u76EE\u306B\u304A\u7B54\u3048\u304F\u3060\u3055\u3044</div>
@@ -757,8 +862,8 @@ function renderQ35(){
   opts.forEach(o=>{
     const ftId=`ft_q35s0_${o.v}`;
     h+=`<div class="ma-option" data-qid="q35_s0" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
-      <div class="checkbox"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+      <div style="flex:1"><div>${escHtml(o.label)}</div>
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
   });
   /* step 2: SA from selected (hidden initially) */
   h+=`<div class="q35-step hidden-step" id="q35step2">
@@ -778,9 +883,8 @@ function renderCTA(qid){
   if(qid==='q36'){
     return `<div class="cta-card"><div class="q-number">Q${n}</div>
       <div class="cta-text">もしよろしければタックスナップについてアプリストア（App Store / Google Play）から評価していただけると嬉しいです！</div>
-      <div style="display:flex;gap:12px;justify-content:center">
-        <button class="cta-ok" data-qid="q36" data-val="1" onclick="handleCTASelect(this)">⭐ はい</button>
-        <button class="cta-ok cta-no" data-qid="q36" data-val="2" onclick="handleCTASelect(this)">いいえ</button>
+      <div style="text-align:center">
+        <button class="cta-ok" data-qid="q36" data-val="1" onclick="handleCTASelect(this)">⭐ OK！</button>
       </div>
       <button class="btn-next" onclick="handleCTASubmit('q36')">次へ</button>${backBtn()}</div>`;
   }
@@ -812,7 +916,8 @@ function showSlide(id){
   else if(id==='q36'||id==='q37') html=renderCTA(id);
   else{
     const q=Q[id];if(!q)return;
-    if(q.type==='sa'||q.type==='sa_dynamic') html=renderSA(id);
+    if(q.type==='sa_funnel') html=renderFunnel(id);
+    else if(q.type==='sa'||q.type==='sa_dynamic') html=renderSA(id);
     else if(q.type==='ma') html=renderMA(id);
     else if(q.type==='fa') html=renderFA(id);
     else if(q.type==='nps') html=renderNPS(id);
@@ -847,12 +952,20 @@ function restoreAnswers(id){
   const q=Q[id];if(!q)return;
   const val=answers[id];if(!val&&val!=='')return;
 
-  if(q.type==='sa'||q.type==='sa_dynamic'||id==='q29'){
+  if(q.type==='sa'||q.type==='sa_dynamic'||q.type==='sa_funnel'||id==='q29'){
     if(!val)return;
     const opt=document.querySelector(`[data-qid="${id}"][data-val="${val}"]`);
     if(opt){opt.classList.add('selected');
       const ft=opt.querySelector('.inline-text'),ftVal=answers[id+'_text'];
       if(ft&&ftVal){ft.classList.remove('hidden');ft.value=ftVal}
+    }
+    // Q2: restore sub-question
+    if(id==='q2'&&(val==='2'||val==='3')){
+      const subOpt=document.querySelector('[data-qid="q2"][data-val="sub"]');
+      if(subOpt)subOpt.classList.add('selected');
+      const wrap=document.getElementById('q2SubWrap');if(wrap)wrap.classList.remove('hidden-step');
+      const subSel=document.querySelector(`[data-qid="q2sub"][data-val="${val}"]`);
+      if(subSel)subSel.classList.add('selected');
     }
     // Q9: restore inline Q10
     if(id==='q9'){const fa=document.getElementById('q9FAWrap');if(fa)fa.classList.remove('hidden-step');
@@ -909,35 +1022,16 @@ function goBack(){
 function backBtn(){return slideHistory.length>0?'<button class="btn-back" onclick="goBack()">← 戻る</button>':''}
 
 /* ── Event Handlers ───────────────────────────────── */
-const snappyMessages=['入力中...👀','いいね！📧','あとちょっと！✨'];
-let snappyMsgIdx=0;
 function handleEmailTyping(inp){
-  const v=inp.value.trim(),speech=document.getElementById('snappySpeech'),chk=document.getElementById('emailCheck');
+  const v=inp.value.trim(),chk=document.getElementById('emailCheck');
   const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  // show check mark on valid
   if(chk){if(valid){chk.classList.add('show')}else{chk.classList.remove('show')}}
-  // snappy reacts
-  if(speech&&v.length>0){
-    if(valid){speech.innerHTML='準備OK！🎉';speech.classList.add('show')}
-    else if(v.includes('@')){speech.innerHTML='あとちょっと！✨';speech.classList.add('show')}
-    else if(v.length>3){speech.innerHTML='入力中... 👀';speech.classList.add('show')}
-  }
-  // remove error on typing
   inp.classList.remove('error');
   const err=document.getElementById('emailError');if(err)err.classList.remove('show');
 }
-function handleEmailFocus(){
-  const speech=document.getElementById('snappySpeech');
-  if(speech){speech.innerHTML='メアドを教えてね！';speech.classList.add('show')}
-}
-function handleEmailBlur(){
-  const inp=document.getElementById('emailInput');
-  if(!inp||!inp.value.trim()){const speech=document.getElementById('snappySpeech');if(speech){speech.innerHTML='よろしくね！'}}
-}
-function handleIntroSubmit(){
+function handleEmailSubmit(){
   const inp=document.getElementById('emailInput'),err=document.getElementById('emailError'),v=inp.value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){inp.classList.add('error');err.classList.add('show');
-    const speech=document.getElementById('snappySpeech');if(speech){speech.innerHTML='メアドを確認してね 🙏';speech.classList.add('show')}return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){inp.classList.add('error');err.classList.add('show');return}
   inp.classList.remove('error');err.classList.remove('show');answers.email=v;goToNext();
 }
 
@@ -947,6 +1041,14 @@ function handleSAClick(el,hasFT,ftReq){
   el.classList.add('selected');
   emitSparkles(el);
   if(hasFT){const ft=el.querySelector('.inline-text');if(ft){ft.classList.remove('hidden');ft.focus()}}
+  // Q2: show/hide inline sub-question for 会社員＋副業
+  if(qid==='q2'){
+    const wrap=document.getElementById('q2SubWrap');
+    if(wrap){
+      if(el.dataset.val==='sub'){wrap.classList.remove('hidden-step');wrap.scrollIntoView({behavior:'smooth',block:'nearest'})}
+      else{wrap.classList.add('hidden-step');document.querySelectorAll('[data-qid="q2sub"]').forEach(o=>o.classList.remove('selected'))}
+    }
+  }
   // Q9: show inline Q10 reason
   if(qid==='q9'){const fa=document.getElementById('q9FAWrap');if(fa&&fa.classList.contains('hidden-step')){fa.classList.remove('hidden-step');fa.scrollIntoView({behavior:'smooth',block:'nearest'})}}
 }
@@ -954,12 +1056,19 @@ function handleSAClick(el,hasFT,ftReq){
 function handleSASubmit(qid){
   const container=document.querySelector(`[data-qid="${qid}"]`);if(!container)return;
   const card=container.closest('.q-card')||container.parentElement;
-  const sel=card.querySelector('.sa-option.selected');
+  const sel=card.querySelector('.sa-option.selected')||card.querySelector('.funnel-option.selected');
   if(!sel){showInlineError(card,'\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044');return}
   const val=sel.dataset.val,opt=getOptDef(qid,val);
   const ft=sel.querySelector('.inline-text');
   if(ft&&!ft.classList.contains('hidden')&&opt&&opt.freeTextRequired&&!ft.value.trim()){ft.style.borderColor='var(--error)';return}
-  answers[qid]=val;
+  // Q2: remap 会社員＋副業 based on sub-answer
+  if(qid==='q2'&&val==='sub'){
+    const subSel=document.querySelector('[data-qid="q2sub"].selected');
+    if(!subSel){showInlineError(card,'副業の収入タイプを選んでください');return}
+    answers[qid]=subSel.dataset.val; // '2' or '3'
+  } else {
+    answers[qid]=val;
+  }
   if(ft&&ft.value.trim())answers[qid+'_text']=ft.value.trim();
   // Q9: collect Q10 inline FA
   if(qid==='q9'){const fa=document.getElementById('fa_q10');if(fa)answers.q10=fa.value.trim()}
@@ -1107,8 +1216,8 @@ function handleCTASelect(el){
 }
 function handleCTASubmit(qid){
   const sel=document.querySelector(`.cta-ok.cta-selected[data-qid="${qid}"]`);
-  if(!sel){const c=document.querySelector('.cta-card');if(c)showInlineError(c,'選択してください');return}
-  answers[qid]=sel.dataset.val;
+  if(sel)answers[qid]=sel.dataset.val;
+  else answers[qid]='';
   goToNext();
 }
 function burstConfetti(btn){
