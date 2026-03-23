@@ -890,11 +890,11 @@ function renderCTA(qid){
   }
   return `<div class="cta-card"><div class="q-number">Q${n}</div>
     <div class="cta-text">サービス改善のため、タックスナップ社員がお話をお聞きすることにご協力いただけますか？</div>
-    <div class="cta-sub">※ご協力いただける方にはメールでご連絡させていただく場合があります</div>
-    <div style="display:flex;gap:12px;justify-content:center">
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:12px">
       <button class="cta-ok" data-qid="q37" data-val="1" onclick="handleCTASelect(this)">🙋 はい</button>
       <button class="cta-ok cta-no" data-qid="q37" data-val="2" onclick="handleCTASelect(this)">いいえ</button>
     </div>
+    <div style="font-size:11px;color:var(--text-light);line-height:1.6;text-align:center">※ご協力いただける方にはメールでご連絡させていただく場合があります</div>
     <button class="btn-next" onclick="handleCTASubmit('q37')">次へ</button>${backBtn()}</div>`;
 }
 
