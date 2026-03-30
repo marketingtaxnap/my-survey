@@ -31,7 +31,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .intro-hero{background:linear-gradient(180deg,#e8f8f0 0%,#f0faf5 50%,#fff 100%);padding:32px 20px 16px;text-align:center;position:relative;overflow:hidden}
 .intro-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(39,186,116,.06);border-radius:50%}
 .intro-hero::after{content:'';position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(39,186,116,.04);border-radius:50%}
-.intro-hero .deco{position:absolute;opacity:.4;animation:decoFloat 3s ease-in-out infinite}
+.intro-hero .deco{position:absolute;opacity:.6;animation:decoFloat 3s ease-in-out infinite}
 .intro-hero .deco-1{top:12px;left:16px;font-size:20px;transform:rotate(-15deg);animation-delay:0s}
 .intro-hero .deco-2{top:10px;right:20px;font-size:18px;transform:rotate(10deg);animation-delay:.5s}
 .intro-hero .deco-3{bottom:14px;right:14px;font-size:16px;transform:rotate(20deg);animation-delay:1s}
@@ -44,6 +44,10 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .intro-hero .deco-10{bottom:20px;right:30%;font-size:15px;animation-delay:.6s}
 .intro-hero .deco-11{top:40%;left:25%;font-size:10px;animation-delay:2.2s}
 .intro-hero .deco-12{bottom:40px;right:8%;font-size:13px;animation-delay:1s}
+.intro-hero .deco-13{top:8px;left:50%;font-size:12px;animation-delay:2.5s}
+.intro-hero .deco-14{top:55%;right:15%;font-size:11px;animation-delay:.4s}
+.intro-hero .deco-15{bottom:5px;left:45%;font-size:14px;animation-delay:1.7s}
+.intro-hero .deco-16{top:25%;left:5%;font-size:12px;animation-delay:2.8s}
 @keyframes decoFloat{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-4px) rotate(var(--r,0deg))}}
 .intro-hero canvas{width:120px;height:120px;margin:0 auto 10px;display:block;position:relative;z-index:1}
 .intro-speech{display:inline-block;background:#fff;border-radius:20px 20px 20px 4px;box-shadow:0 2px 10px rgba(39,186,116,.1);padding:10px 20px;margin-bottom:14px;position:relative;opacity:0;transform:translateY(8px) scale(.95);transition:all .5s cubic-bezier(.34,1.56,.64,1);border:1.5px solid rgba(39,186,116,.15)}
@@ -682,6 +686,10 @@ function renderIntro(){
       <span class="deco deco-10">✏️</span>
       <span class="deco deco-11">💫</span>
       <span class="deco deco-12">🍀</span>
+      <span class="deco deco-13">🌟</span>
+      <span class="deco deco-14">🐶</span>
+      <span class="deco deco-15">📊</span>
+      <span class="deco deco-16">💰</span>
       <canvas id="snappyIntro" width="224" height="224"></canvas>
       <div class="intro-speech" id="snappySpeech">
         <p>あなたの声を聞かせてください！</p>
