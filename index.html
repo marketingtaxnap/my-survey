@@ -780,7 +780,7 @@ function renderSA(qid){
     const ftId=`ft_${qid}_${o.v}`;
     h+=`<div class="sa-option" data-qid="${qid}" data-val="${o.v}" onclick="handleSAClick(this,${!!o.freeText},${!!o.freeTextRequired})">
       <div class="radio"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="${o.freeTextPlaceholder||'詳細を入力してください'}" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
     // Q2: sub-question after 会社員＋副業
     if(qid==='q2'&&o.v==='sub'){
       h+=`<div class="hidden-step" id="q2SubWrap" style="margin:-4px 0 10px 32px;background:var(--brand-light);border-radius:10px;padding:14px 16px">
@@ -810,7 +810,7 @@ function renderMA(qid){
     const ftId=`ft_${qid}_${o.v}`;
     h+=`<div class="ma-option" data-qid="${qid}" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
       <div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="${o.freeTextPlaceholder||'詳細を入力してください'}" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
   });
   h+=`<button class="btn-next" onclick="handleMASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
   return h;
@@ -885,7 +885,7 @@ function renderQ29(){
     const ftId=`ft_q29_${o.v}`;
     h+=`<div class="sa-option" data-qid="q29" data-val="${o.v}" onclick="handleSAClick(this,${!!o.freeText},false)">
       <div class="radio"></div><div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="\u8A73\u7D30\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="${o.freeTextPlaceholder||'詳細を入力してください'}" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
   });
   h+=`<button class="btn-next" onclick="handleSASubmit('q29')">次へ</button>${backBtn()}</div>`;return h;
 }
