@@ -1342,11 +1342,44 @@ async function submitSurvey(){
     q37:'Q38_インタビュー協力'
   };
   const data={timestamp:new Date().toISOString()};
+  // Q29の動的選択肢ラベル解決
+  function resolveQ29(val){
+    if(!val)return val;
+    if(val==='0')return 'タックスナップに切り替えていない';
+    // Q28の選択肢から探す
+    const q28=Q.q28;if(q28&&q28.options){
+      const opt=q28.options.find(o=>o.v===val);
+      if(opt)return opt.label||val;
+    }
+    return val;
+  }
+  // Q35のステップ内選択肢ラベル解決
+  function resolveQ35Opt(val){
+    if(!val)return val;
+    const opts=Q.q35&&Q.q35.steps&&Q.q35.steps[0]&&Q.q35.steps[0].options;
+    if(!opts)return val;
+    return val.split(',').map(v=>{
+      const opt=opts.find(o=>o.v===v);
+      return opt?(opt.label||v):v;
+    }).join(', ');
+  }
   // resolve all answers to labels with Q番号キー
   Object.keys(raw).forEach(k=>{
     const col=qMap[k]||k;
     const q=Q[k];
     if(k==='email'){data[col]=raw[k];return}
+    // Q29: 動的選択肢
+    if(k==='q29'){data[col]=resolveQ29(raw[k]);return}
+    // Q35 steps
+    if(k==='q35_ma'){data[col]=resolveQ35Opt(raw[k]);return}
+    if(k==='q35_sa'){data[col]=resolveQ35Opt(raw[k]);return}
+    if(k==='q35_fa'||k==='q35_ma_text'){data[col]=raw[k];return}
+    // Q37(インタビュー): ラベルから注釈除去
+    if(k==='q37'){
+      const q37=Q.q37;if(q37&&q37.options){
+        const opt=q37.options.find(o=>o.v===raw[k]);
+        data[col]=opt?(opt.label.split('\n')[0]):raw[k];
+      }else{data[col]=raw[k]}return}
     if(!q){
       // matrix, text, special keys
       if(k.match(/^q3[34]_\d$/)){
@@ -1363,7 +1396,7 @@ async function submitSurvey(){
     } else if(q.type==='nps'){
       data[col]=raw[k];
     } else if(q.type==='multi_step'){
-      // q35 handled via q35_ma, q35_sa, q35_fa keys
+      // handled above
     } else {
       data[col]=resolveLabel(k,raw[k]);
     }
