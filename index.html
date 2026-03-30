@@ -56,8 +56,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .intro-speech::after{content:'';position:absolute;bottom:-6px;left:24px;width:12px;height:12px;background:#fff;transform:rotate(45deg);border-bottom:1.5px solid rgba(39,186,116,.15);border-right:1.5px solid rgba(39,186,116,.15)}
 /* incentive banner */
 .intro-incentive{background:linear-gradient(135deg,#fef9e7 0%,#fdf2c5 50%,#fce8a0 100%);border-radius:16px;padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;border:2px solid #f0c040;box-shadow:0 4px 16px rgba(240,192,64,.2);position:relative;overflow:hidden}
-.intro-incentive::before{content:'✨';position:absolute;top:6px;right:10px;font-size:16px;opacity:.5;animation:decoFloat 2s ease-in-out infinite}
-.intro-incentive::after{content:'🎉';position:absolute;bottom:6px;right:30px;font-size:14px;opacity:.4;animation:decoFloat 2.5s ease-in-out infinite}
 .intro-incentive .incentive-icon{font-size:38px;flex-shrink:0;animation:decoFloat 2s ease-in-out infinite}
 .intro-incentive .incentive-text{font-size:13px;font-weight:700;color:#7a5c0a;line-height:1.6}
 .intro-incentive .incentive-text .incentive-highlight{color:#d63031;font-size:19px;font-weight:800}
@@ -515,7 +513,7 @@ const Q = {
       {v:'5',label:'🛡️ 税務調査のリスクが抑えられる'},{v:'6',label:'💰 返金保証がある'},
       {v:'7',label:'👨‍⚖️ 税理士監修のアプリ'},{v:'8',label:'💹 節税できる'},
       {v:'9',label:'💴 料金的に安い'},{v:'10',label:'👀 アプリが見やすい・分かりやすい'},
-      {v:'11',label:'📱 スマホアプリで完結できる'},{v:'12',label:'📞 サポートが良い'},
+      {v:'11',label:'📱 スマホアプリで完結できる'},{v:'12',label:'💬 サポートが良い'},
       {v:'13',label:'特にない/使っていない'},
       {v:'14',label:'✏️ その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last2',required:true},
@@ -924,14 +922,14 @@ function renderCTA(qid){
     return `<div class="cta-card"><div class="q-number">Q${n}</div>
       <div class="cta-text">もしよろしければタックスナップについてアプリストア（App Store / Google Play）から評価していただけると嬉しいです！</div>
       <div style="text-align:center">
-        <button class="cta-ok" data-qid="q36" data-val="1" onclick="handleCTASelect(this)">⭐ OK！</button>
+        <button class="cta-ok" data-qid="q36" data-val="1" onclick="handleCTASelect(this)">OK！</button>
       </div>
       <button class="btn-next" onclick="handleCTASubmit('q36')">次へ</button>${backBtn()}</div>`;
   }
   return `<div class="cta-card"><div class="q-number">Q${n}</div>
     <div class="cta-text">サービス改善のため、タックスナップ社員がお話をお聞きすることにご協力いただけますか？</div>
     <div style="display:flex;gap:12px;justify-content:center;margin-bottom:12px">
-      <button class="cta-ok" data-qid="q37" data-val="1" onclick="handleCTASelect(this)">🙋 はい</button>
+      <button class="cta-ok" data-qid="q37" data-val="1" onclick="handleCTASelect(this)">はい</button>
       <button class="cta-ok cta-no" data-qid="q37" data-val="2" onclick="handleCTASelect(this)">いいえ</button>
     </div>
     <div style="font-size:11px;color:var(--text-light);line-height:1.6;text-align:center">※ご協力いただける方にはメールでご連絡させていただく場合があります</div>
