@@ -1276,8 +1276,100 @@ function showInlineError(container,msg){
 }
 
 /* ── Submit ────────────────────────────────────────── */
+function resolveLabel(qid,val){
+  if(!val)return val;
+  const q=Q[qid];if(!q)return val;
+  // matrix keys like q33_1
+  if(qid.includes('_')){
+    const baseQ=Q[qid.split('_')[0]];
+    if(baseQ&&baseQ.cols){const i=parseInt(val)-1;return baseQ.cols[i]||val}
+  }
+  if(q.options){
+    const opt=q.options.find(o=>o.v===val);
+    if(opt)return opt.badge||opt.label||val;
+  }
+  return val;
+}
+function resolveMALabels(qid,val){
+  if(!val)return val;
+  const q=Q[qid];if(!q||!q.options)return val;
+  return val.split(',').map(v=>{
+    const opt=q.options.find(o=>o.v===v);
+    return opt?(opt.label||v):v;
+  }).join(', ');
+}
 async function submitSurvey(){
-  const data={...answers,timestamp:new Date().toISOString(),user_agent:navigator.userAgent,token:POST_TOKEN};
+  const raw={...answers};
+  // 内部ID → 調査票Q番号マッピング
+  const qMap={
+    email:'Q1_email',
+    q2:'Q2_働き方', q2_text:'Q2_その他',
+    q3:'Q3_職種', q3_text:'Q3_その他',
+    q4:'Q4_不動産所得',
+    q5:'Q5_確定申告作成',
+    q6:'Q6_申告回数',
+    q6b:'Q7_認知時期',
+    q8:'Q8_LLMO認知',
+    q7:'Q9_NPS',
+    q9_fa:'Q10_NPS理由',
+    q9:'Q11_PMF',
+    q10:'Q12_PMF理由',
+    q11:'Q13_利用ステータス', q11_text:'Q13_その他',
+    q12:'Q14_トライアル未登録理由', q12_text:'Q14_その他',
+    q13:'Q15_冷やかし深掘り', q13_text:'Q15_自由記述',
+    q14:'Q16_操作UX障壁', q14_text:'Q16_自由記述',
+    q15:'Q17_使用感不満', q15_text:'Q17_自由記述',
+    q16:'Q18_環境不一致', q16_text:'Q18_自由記述',
+    q17:'Q19_手続き障壁', q17_text:'Q19_自由記述',
+    q18:'Q20_料金障壁', q18_text:'Q20_自由記述',
+    q19:'Q21_信頼不安', q19_text:'Q21_自由記述',
+    q20:'Q22_キャンセル理由', q20_text:'Q22_その他',
+    q21:'Q23_冷やかし深掘り', q21_text:'Q23_自由記述',
+    q22:'Q24_操作UX障壁', q22_text:'Q24_自由記述',
+    q23:'Q25_使用感不満', q23_text:'Q25_自由記述',
+    q24:'Q26_環境不一致', q24_text:'Q26_自由記述',
+    q25:'Q27_料金障壁', q25_text:'Q27_自由記述',
+    q26:'Q28_サブスク不安', q26_text:'Q28_自由記述',
+    q27:'Q29_信頼不安', q27_text:'Q29_自由記述',
+    q28:'Q30_経験手段', q28_text:'Q30_自由記述',
+    q29:'Q31_切替前手段', q29_text:'Q31_自由記述',
+    q30:'Q32_今年の手段', q30_text:'Q32_自由記述',
+    q31:'Q33_利用理由', q31_text:'Q33_自由記述',
+    q32:'Q34_改善要望', q32_text:'Q34_自由記述',
+    q33_1:'Q35_信用が貯まる',q33_2:'Q35_ポイントが貯まる',q33_3:'Q35_電話サポート',q33_4:'Q35_LINEで完結',
+    q34_1:'Q36_職種に特化',q34_2:'Q36_手取り最大化',q34_3:'Q36_仲間とつながる',q34_4:'Q36_仕事が見つかる',
+    q35_ma:'Q37_課題MA', q35_sa:'Q37_課題SA', q35_fa:'Q37_課題FA', q35_ma_text:'Q37_課題自由記述',
+    q37:'Q38_インタビュー協力'
+  };
+  const data={timestamp:new Date().toISOString()};
+  // resolve all answers to labels with Q番号キー
+  Object.keys(raw).forEach(k=>{
+    const col=qMap[k]||k;
+    const q=Q[k];
+    if(k==='email'){data[col]=raw[k];return}
+    if(!q){
+      // matrix, text, special keys
+      if(k.match(/^q3[34]_\d$/)){
+        const baseQ=Q[k.split('_')[0]];
+        if(baseQ&&baseQ.cols){const i=parseInt(raw[k])-1;data[col]=baseQ.cols[i]||raw[k]}
+        else data[col]=raw[k];
+      } else {
+        data[col]=raw[k];
+      }
+      return;
+    }
+    if(q.type==='ma'){
+      data[col]=resolveMALabels(k,raw[k]);
+    } else if(q.type==='nps'){
+      data[col]=raw[k];
+    } else if(q.type==='multi_step'){
+      // q35 handled via q35_ma, q35_sa, q35_fa keys
+    } else {
+      data[col]=resolveLabel(k,raw[k]);
+    }
+  });
+  data.user_agent=navigator.userAgent;
+  data.token=POST_TOKEN;
   document.getElementById('submitting').classList.remove('hidden');
   document.getElementById('progressWrap').style.display='none';
   try{await fetch(GAS_URL,{method:'POST',body:JSON.stringify(data),mode:'no-cors'});console.log('Survey submitted',data)}
