@@ -341,7 +341,7 @@ const Q = {
       {v:'c',label:'🟡 弥生で進めていた'},{v:'d',label:'📊 その他の会計ソフトで進めていた'},
       {v:'e',label:'👨‍⚖️ 税理士に依頼していた'},{v:'f',label:'📄 紙やノートで進めていた'},
       {v:'g',label:'📈 スプレッドシート/Excelで進めていた'},{v:'h',label:'👨‍👩‍👦 友人・家族に依頼していた'},
-      {v:'i',label:'🤔 手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
+      {v:'i',label:'🤔 手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true,freeTextPlaceholder:'きっかけや理由を教えてください'},
       {v:'j',label:'✏️ その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last2',required:true},
   q14:{type:'ma',
@@ -366,7 +366,7 @@ const Q = {
   q16:{type:'ma',
     text:'「自分の利用環境や申告内容に合わなかった」点として、あてはまるものをすべてお答えください。',
     options:[
-      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true},
+      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true,freeTextPlaceholder:'対応していなかった所得や取引の種類を教えてください'},
       {v:'b',label:'自分の規模なら、ここまでの機能は必要ないと思った'},
       {v:'c',label:'PC・タブレットで使いたかった'},
       {v:'d',label:'自分の銀行口座・カードが連携に対応していなかった'},
@@ -422,7 +422,7 @@ const Q = {
       {v:'c',label:'弥生で進めていた'},{v:'d',label:'その他の会計ソフトで進めていた'},
       {v:'e',label:'税理士に依頼していた'},{v:'f',label:'紙やノートで進めていた'},
       {v:'g',label:'スプレッドシート/Excelで進めていた'},{v:'h',label:'友人・家族に依頼していた'},
-      {v:'i',label:'手法は決めていない、とりあえずダウンロードしてみただけ',freeText:true,freeTextRequired:true},
+      {v:'i',label:'手法は決めていない、とりあえず試してみただけ',freeText:true,freeTextRequired:true,freeTextPlaceholder:'きっかけや理由を教えてください'},
       {v:'j',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last2',required:true},
   q22:{type:'ma',
@@ -447,7 +447,7 @@ const Q = {
   q24:{type:'ma',
     text:'「自分の利用環境や申告内容に合わなかった」点として、あてはまるものをすべてお答えください。',
     options:[
-      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true},
+      {v:'a',label:'自分の所得種別に対応していなかった',freeText:true,freeTextRequired:true,freeTextPlaceholder:'対応していなかった所得や取引の種類を教えてください'},
       {v:'b',label:'自分の規模なら、ここまでの機能は必要ないと思った'},
       {v:'c',label:'PC・タブレットで使いたかった'},
       {v:'d',label:'自分の銀行口座・カードが連携に対応していなかった'},
@@ -699,8 +699,7 @@ function renderIntro(){
       <div style="text-align:center;margin-bottom:16px">
         <div class="intro-title">かんたん5分アンケート</div>
         <div class="intro-sub">
-          タックスナップをご利用いただきありがとうございます。<br>
-          今後のサービス改善のため、ご協力をお願いいたします。
+          今後のサービス改善のため、<br>ご協力をお願いいたします。
         </div>
       </div>
       <div class="intro-email-wrap">
