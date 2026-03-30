@@ -140,7 +140,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .funnel-option.selected .radio{border-color:var(--brand);background:var(--brand)}
 .funnel-option.selected .radio::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
 .funnel-option .funnel-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--brand);background:var(--brand-light);padding:2px 8px;border-radius:4px;margin-right:8px;flex-shrink:0}
-.funnel-option .funnel-label{font-size:13px;color:var(--text);line-height:1.5}
+.funnel-option .funnel-label{font-size:13px;color:var(--text);line-height:1.5;white-space:pre-line}
 /* Q36/Q37 CTA */
 .cta-card{background:var(--card);border-radius:var(--radius);padding:32px 20px;box-shadow:var(--shadow);margin-top:16px;text-align:center}
 .cta-card .q-number{text-align:left}
@@ -264,24 +264,31 @@ const Q = {
     text:'これまでに確定申告を行った回数を教えてください。',
     options:[
       {v:'1',label:'0回（まだしたことがない）'},{v:'2',label:'1回'},
-      {v:'3',label:'2回'},{v:'4',label:'3〜5回'},
-      {v:'5',label:'6〜10回'},{v:'6',label:'それ以上'},{v:'7',label:'わからない'}
+      {v:'3',label:'2〜5回'},{v:'4',label:'6〜10回'},
+      {v:'5',label:'それ以上'},{v:'6',label:'わからない'}
     ],order:'fixed',required:true},
   q6b:{type:'sa',autoAdvance:false,
     text:'タックスナップのことをいつ知りましたか？',
     options:[
-      {v:'1',label:'2026年3月'},
-      {v:'2',label:'2026年2月'},
-      {v:'3',label:'2026年1月'},
-      {v:'4',label:'2025年4〜12月'},
-      {v:'5',label:'2025年1〜3月'},
+      {v:'1',label:'今年（2026年）の3月'},
+      {v:'2',label:'今年（2026年）の2月'},
+      {v:'3',label:'今年（2026年）の1月'},
+      {v:'4',label:'去年（2025年）の4〜12月'},
+      {v:'5',label:'去年（2025年）の1〜3月'},
       {v:'6',label:'それより前'},
       {v:'7',label:'覚えてない・分からない'}
+    ],order:'fixed',required:true},
+  q8:{type:'sa',autoAdvance:false,
+    text:'タックスナップを使い始める前に、AI検索（ChatGPTなど）でタックスナップの名前を見たり調べたりしましたか？',
+    options:[
+      {v:'1',label:'はい'},
+      {v:'2',label:'いいえ'},
+      {v:'3',label:'覚えていない'}
     ],order:'fixed',required:true},
   q7:{type:'nps',
     text:'あなたはタックスナップを友人や知人にどの程度オススメしたいと思いますか？',
     min:1,max:10,leftLabel:'👎全くオススメできない',rightLabel:'とてもオススメしたい🔥',required:true},
-  q8:{type:'fa',text:'この点数をつけた理由を是非教えてくださいm(_)m',required:false},
+  q9_fa:{type:'fa',text:'この点数をつけた理由を是非教えてくださいm(_)m',required:false},
   q9:{type:'sa',autoAdvance:false,
     text:'もし明日からタックスナップが使えなくなったら、あなたはどのように感じますか？',
     options:[
@@ -290,11 +297,11 @@ const Q = {
     ],order:'fixed',required:true},
   q10:{type:'fa',text:'選んだ理由を是非教えてくださいm(_)m',required:false},
   q11:{type:'sa_funnel',autoAdvance:false,
-    text:'タックスナップのご利用状況を教えてください。',
+    text:'2025年度分（2026年2,3月提出）の確定申告における、タックスナップのご利用状況を教えてください。',
     callout:'<strong>「無料トライアル登録」とは？</strong><br>決済ページにクレジットカード情報を入力してトライアルを開始した状態',
     options:[
-      {v:'1',label:'ダウンロードだけして、無料トライアルには登録していない',step:'📥'},
-      {v:'2',label:'無料トライアルに登録したが、有料課金せずキャンセルした',step:'🔄'},
+      {v:'1',label:'ダウンロードしただけ。\n無料トライアルには登録していない',step:'📥'},
+      {v:'2',label:'無料トライアルに登録した。\nしかし、有料課金はせずキャンセルした',step:'🔄'},
       {v:'3',label:'タックスナップに有料課金した',step:'💳'},
       {v:'4',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'fixed',required:true},
@@ -334,10 +341,10 @@ const Q = {
   q15:{type:'ma',
     text:'使ってみて良さを感じなかった理由として、あてはまるものをすべてお答えください。',
     options:[
-      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true},
-      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true},
-      {v:'c',label:'自分が期待していた機能がなかった',freeText:true},
-      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true},
+      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
+      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
+      {v:'c',label:'自分が期待していた機能がなかった',freeText:true,freeTextPlaceholder:'どのような機能を期待していましたか？'},
+      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
       {v:'e',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q16:{type:'ma',
@@ -386,7 +393,7 @@ const Q = {
     options:[
       {v:'1',label:'とりあえず試してみただけ・他手法で申告することを決めていた'},
       {v:'2',label:'使い方がわからなかった・操作で行き詰まった'},
-      {v:'3',label:'使えたけど、期待したほどではなかった'},
+      {v:'3',label:'使ってみたが、期待したほど良くなかった'},
       {v:'4',label:'自分の利用環境や申告内容に合わなかった'},
       {v:'5',label:'料金が合わなかった'},
       {v:'6',label:'サービスが信頼できなかった・不安要素があった'},
@@ -415,10 +422,10 @@ const Q = {
   q23:{type:'ma',
     text:'使ってみて良さを感じなかった理由として、あてはまるものをすべてお答えください。',
     options:[
-      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true},
-      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true},
-      {v:'c',label:'自分が期待していた機能がなかった',freeText:true},
-      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true},
+      {v:'a',label:'思ったより手間がかかりそうだった',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
+      {v:'b',label:'機能の精度やクオリティが低かった',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
+      {v:'c',label:'自分が期待していた機能がなかった',freeText:true,freeTextPlaceholder:'どのような機能を期待していましたか？'},
+      {v:'d',label:'自分の知識やスキルでは使いこなせないと感じた',freeText:true,freeTextPlaceholder:'具体的にどのような点ですか？'},
       {v:'e',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q24:{type:'ma',
@@ -461,12 +468,12 @@ const Q = {
       {v:'h',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q28:{type:'ma',
-    text:'確定申告や帳簿付けで経験したことがある手段を教えてください。',
+    text:'今までに確定申告や帳簿付けで経験したことがある手段を教えてください。',
     options:[
       {v:'1',label:'freee'},{v:'2',label:'マネーフォワード'},{v:'3',label:'弥生'},
       {v:'4',label:'finfin'},{v:'5',label:'タックスナップ'},
       {v:'6',label:'Excel / Spreadsheet'},{v:'7',label:'紙やノート'},
-      {v:'8',label:'税理士に依頼'},{v:'9',label:'団体やコミュニティからサポート'},
+      {v:'8',label:'税理士に依頼'},{v:'9',label:'団体やコミュニティからのサポート'},
       {v:'10',label:'家族や友人に依頼'},{v:'11',label:'税務署に相談'},
       {v:'12',label:'今回が初めてなので上記の選択肢にない',exclusive:true},
       {v:'13',label:'その他',freeText:true,freeTextRequired:true}
@@ -479,7 +486,7 @@ const Q = {
       {v:'1',label:'freee'},{v:'2',label:'マネーフォワード'},{v:'3',label:'弥生'},
       {v:'4',label:'finfin'},{v:'5',label:'Excel / Spreadsheet'},
       {v:'6',label:'紙やノート'},{v:'7',label:'税理士に依頼'},
-      {v:'8',label:'団体やコミュニティからサポート'},{v:'9',label:'家族や友人に依頼'},
+      {v:'8',label:'団体やコミュニティからのサポート'},{v:'9',label:'家族や友人に依頼'},
       {v:'10',label:'税務署に相談'},{v:'11',label:'その他',freeText:true,freeTextRequired:true}
     ],order:'randomize_last1',required:true},
   q31:{type:'sa',autoAdvance:false,
@@ -561,7 +568,8 @@ function getNextSlide(cur){
   if(cur==='q4') return 'q5';
   if(cur==='q5') return 'q6';
   if(cur==='q6') return 'q6b';
-  if(cur==='q6b') return 'q7';
+  if(cur==='q6b') return 'q8';
+  if(cur==='q8') return 'q7';
   if(cur==='q7') return 'q9'; /* Q8 is inline with Q7 */
   if(cur==='q9'){ /* Q10 is inline with Q9 */
     if(['1','2'].includes(answers.q2)||answers.q4==='1') return 'q11';
@@ -701,7 +709,7 @@ function renderFunnel(qid){
     } else {
       h+=`<div class="funnel-option" data-qid="${qid}" data-val="${o.v}" onclick="handleFunnelClick(this)">
         <div class="radio"></div><div style="flex:1"><div class="funnel-label">${escHtml(o.label)}</div>
-        ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力してください" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
+        ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="${o.freeTextPlaceholder||'詳細を入力してください'}" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div></div>`;
     }
   });
   h+=`<button class="btn-next" onclick="handleSASubmit('${qid}')">次へ</button>${backBtn()}</div>`;
@@ -803,7 +811,7 @@ function renderNPS(qid){
   h+=`</div></div><div class="error-msg" id="err_${qid}">評価を選択してください</div>
     <div class="nps-fa-wrap hidden-step" id="npsFAWrap">
       <div class="q-text">この点数をつけた理由を是非教えてくださいm(_)m <span class="optional-badge">任意</span></div>
-      <textarea class="fa-textarea" id="fa_q8" placeholder="ご自由にお書きください"></textarea>
+      <textarea class="fa-textarea" id="fa_q9_fa" placeholder="ご自由にお書きください"></textarea>
     </div>
     <button class="btn-next" onclick="handleNPSSubmit('${qid}')" style="margin-top:20px">次へ</button>${backBtn()}</div>`;
   return h;
@@ -834,13 +842,14 @@ function renderMatrix(qid){
 function renderQ29(){
   const q28v=(answers.q28||'').split(','),q28opts=getOrderedOptions('q28'),lm={};
   q28opts.forEach(o=>{lm[o.v]=o.label});
-  let opts=[{v:'0',label:'タックスナップに切り替えていない'}];
-  q28v.forEach(v=>{if(v&&v!=='5'&&v!=='12'&&v!=='13'&&lm[v])opts.push({v,label:lm[v]})});
-  // add "その他" from q28 if selected
+  // build dynamic options: first fixed, middle randomized, その他 last
+  let mid=[];
+  q28v.forEach(v=>{if(v&&v!=='5'&&v!=='12'&&v!=='13'&&lm[v])mid.push({v,label:lm[v]})});
+  mid=shuffle(mid); // randomize middle options
+  let opts=[{v:'0',label:'タックスナップに切り替えていない'},...mid];
+  // add "その他" at end
   if(q28v.includes('13'))opts.push({v:'13',label:'その他',freeText:true,freeTextRequired:true});
-  opts.push({v:'other',label:'その他',freeText:true,freeTextRequired:true});
-  // deduplicate その他
-  const seen=new Set();opts=opts.filter(o=>{const k=o.v;if(seen.has(k))return false;seen.add(k);return true});
+  else opts.push({v:'other',label:'その他',freeText:true,freeTextRequired:true});
 
   let h=`<div class="q-card">${qHeader('q29','sa',false)}
     <div class="q-text">${escHtml(Q.q29.text)}</div>${qHint('sa')}`;
@@ -863,7 +872,7 @@ function renderQ35(){
     const ftId=`ft_q35s0_${o.v}`;
     h+=`<div class="ma-option" data-qid="q35_s0" data-val="${o.v}" ${o.exclusive?'data-exclusive="true"':''} onclick="handleMAClick(this)">
       <div style="flex:1"><div>${escHtml(o.label)}</div>
-      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="詳細を入力" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
+      ${o.freeText?`<textarea class="inline-text hidden" id="${ftId}" placeholder="${o.freeTextPlaceholder||'詳細を入力してください'}" rows="2" onclick="event.stopPropagation()"></textarea>`:''}</div><div class="checkbox"></div></div>`;
   });
   /* step 2: SA from selected (hidden initially) */
   h+=`<div class="q35-step hidden-step" id="q35step2">
@@ -988,7 +997,7 @@ function restoreAnswers(id){
     const star=document.querySelector(`.nps-star[data-val="${val}"]`);
     if(star){star.classList.add('selected');star.style.animation='none'}
     const fa=document.getElementById('npsFAWrap');if(fa)fa.classList.remove('hidden-step');
-    const ta=document.getElementById('fa_q8');if(ta&&answers.q8)ta.value=answers.q8;
+    const ta=document.getElementById('fa_q9_fa');if(ta&&answers.q9_fa)ta.value=answers.q9_fa;
   }
   else if(q.type==='fa'){
     const ta=document.getElementById('fa_'+id);if(ta&&val)ta.value=val;
@@ -1142,8 +1151,8 @@ function handleNPSSubmit(qid){
   if(!answers[qid]){document.getElementById('err_'+qid).classList.add('show');return}
   document.getElementById('err_'+qid).classList.remove('show');
   // collect Q8 inline FA
-  const fa=document.getElementById('fa_q8');
-  if(fa)answers.q8=fa.value.trim();
+  const fa=document.getElementById('fa_q9_fa');
+  if(fa)answers.q9_fa=fa.value.trim();
   goToNext();
 }
 
