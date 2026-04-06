@@ -213,6 +213,21 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 <div class="submitting hidden" id="submitting"><div class="spinner"></div><p>送信しています…</p></div>
 
 <script>
+/* ── 回答期限チェック ─────────────────────────────── */
+const DEADLINE = new Date('2026-04-06T00:00:00+09:00');
+if (new Date() > DEADLINE) {
+  document.getElementById('app').innerHTML = `
+    <div class="logo-bar"><img src="taxnap_logo.png" alt="タックスナップ"></div>
+    <div style="text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px">📋</div>
+      <h2 style="font-size:18px;margin-bottom:12px;color:var(--text)">回答期限が終了しました</h2>
+      <p style="font-size:14px;color:var(--text-sub);line-height:1.7">
+        このアンケートは回答受付を終了いたしました。<br>ご協力ありがとうございました。
+      </p>
+    </div>`;
+  throw new Error('Survey closed');
+}
+
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIz2wmWLWOlgMXSSMF_QkHnYAQCEvw5Whp1BL9FEjmtuzYOxJt_a56DDe4TrGMOgmU/exec';
 const POST_TOKEN = 'e7c794ae-e219-45d9-8255-7bcd9a6e95e9';
 
@@ -1368,6 +1383,10 @@ async function submitSurvey(){
     const col=qMap[k]||k;
     const q=Q[k];
     if(k==='email'){data[col]=raw[k];return}
+    // Q2: サブ質問で値が変わるため特別処理
+    if(k==='q2'){
+      const q2Labels={'1':'フリーランス・個人事業主','2':'会社員＋副業（事業所得）','3':'会社員＋副業（雑所得）','4':'会社員・パート・アルバイト','5':'その他'};
+      data[col]=q2Labels[raw[k]]||raw[k];return}
     // Q29: 動的選択肢
     if(k==='q29'){data[col]=resolveQ29(raw[k]);return}
     // Q35 steps
